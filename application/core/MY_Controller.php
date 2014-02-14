@@ -12,6 +12,16 @@ class MY_Controller extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
+        $this->iniciarLayout();
+    }
+    
+    /**
+     * Carga una vista por defecto segun.
+     *  - falta implementar interaccion con login
+     */
+    public function iniciarLayout()
+    {
+        $this->load->library('layout');
     }
     
 /**

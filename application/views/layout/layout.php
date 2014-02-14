@@ -19,7 +19,7 @@
     <![endif]-->
   </head>  
   <body>
-    <div class="container">
+    <div class="container ">
 
       <!-- Static navbar -->
       <div class="navbar navbar-default" role="navigation">
@@ -35,8 +35,8 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Inicio</a></li>
-              <li><a href="#">Variables</a></li>              
+              <li class="active"><a href="/">Inicio</a></li>
+              <li><a href="/adm_variable/index">Variables</a></li>              
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Objetivos <b class="caret"></b></a>
                 <ul class="dropdown-menu">
@@ -54,7 +54,7 @@
         </div><!--/.container-fluid -->
       </div>
       
-      <div> here content!..  <?php echo $content_for_layout; ?></div>
+      <div class="highlight"><?php echo $content_for_layout; ?></div>
 
     </div> <!-- /container -->
     <script src="../../public/js/vendor/jquery/jquery-1.11.0.js"></script>
