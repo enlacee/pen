@@ -48,7 +48,7 @@
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="./">-</a></li>
+              <li class="active"><a href="/auth/salir">Salir</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->

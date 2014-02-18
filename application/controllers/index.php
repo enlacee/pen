@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Index extends MY_Controller {
     
@@ -9,8 +9,20 @@ class Index extends MY_Controller {
     
     public function index()
     {
-        $this->load->library('layout');        
-        $data['titulo'] = "h1 index in home";        
-        $this->layout->view('adm-home/index', $data);        
+        //var_dump($this->auth);
+        $this->accesoUsuario();
+        $this->load->view('index/index');
+    }
+    
+    private function accesoUsuario()
+    {   
+        if ($this->auth) {
+            $usuario = $this->session->userdata('user');
+            if ($usuario['es_super_usuario'] == '1') {
+                redirect('/adm_variable');
+            } else {
+                redirect('/usr_home'); 
+            }
+        }
     }
 }
