@@ -1,4 +1,3 @@
-<?php if(isset($user) && is_array($user)): ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,22 +19,17 @@
     <![endif]-->
   </head>  
   <body>
-    <div class="container ">          
-    
-    <?php if ($user['es_super_usuario'] == '1'): ?>
-        <?php require_once "nav_administrador.php"; ?>
-    <?php elseif ($user['es_super_usuario'] == '0'): ?>
-        <?php require_once "nav_usuario.php"; ?>
-    <?php endif; ?>      
 
-    <?php var_dump($user); ?>
-    <div class="highlight"><?php echo $content_for_layout; ?></div>
+    <div class="container">
+      <div class="starter-template">
+        <h1>La Session ya termino.</h1>
+        <p class="lead">Ingres&eacute; nuevamente al sistema. <a href="/index">inicio</a></p>
+      </div>
+
+    </div><!-- /.container -->
 
     </div> <!-- /container -->
     <script src="../../public/js/vendor/jquery/jquery-1.11.0.js"></script>
     <script src="../../public/dist/js/bootstrap.min.js"></script>
   </body>
 </html>
-<?php else: ?>
-    <?php require_once "salir.php"; ?>
-<?php endif;?>
