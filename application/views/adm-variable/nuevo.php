@@ -1,3 +1,7 @@
+<?php
+echo "LISTA DE VARIABLES";
+var_dump($id_usuario);
+var_dump($email);?>
 <h2>Crear Variable</h2>
 <form name="form-variable" class="form-horizontal" role="form" action="">
   <div class="form-group">

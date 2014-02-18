@@ -53,7 +53,7 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </div>
-      
+      <?php var_dump($user); ?>
       <div class="highlight"><?php echo $content_for_layout; ?></div>
 
     </div> <!-- /container -->

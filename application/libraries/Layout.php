@@ -3,11 +3,11 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Layout
 {    
-    var $obj;
+    var $CI;
     var $layout;
     
     function Layout($layout = "layout/layout") {   
-        $this->obj =& get_instance();
+        $this->CI =& get_instance();
         $this->layout = $layout;
     }
 
@@ -17,14 +17,16 @@ class Layout
     }
     
     function view($view, $data=null, $return=false)
-    {
+    {   
         $loadedData = array();
-        $loadedData['content_for_layout'] = $this->obj->load->view($view, $data, true);   
+        $loadedData = array_merge($loadedData, (array) $this->CI->session->all_userdata());
+        
+        $loadedData['content_for_layout'] = $this->CI->load->view($view, $data, true);   
         if ($return) {
-            $output = $this->obj->load->view($this->layout, $loadedData, true);
+            $output = $this->CI->load->view($this->layout, $loadedData, true);
             return $output;
         } else {
-            $this->obj->load->view($this->layout, $loadedData, false);
+            $this->CI->load->view($this->layout, $loadedData, false);
         }
     }
 }
