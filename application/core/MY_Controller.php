@@ -10,10 +10,9 @@
 class MY_Controller extends CI_Controller {
     
     public $auth;
-    
     public $dataView = array();    
     private $flagGrid = false;
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -24,8 +23,7 @@ class MY_Controller extends CI_Controller {
     }
 
     private function dependenciasBasicas()
-    {   
-        //$this->load->library('session');
+    {
         $this->load->helper('url');
     }
     /**
@@ -51,16 +49,14 @@ class MY_Controller extends CI_Controller {
         } else {
             $this->auth = false;
         }
-    }
-    
+    }    
     
     /**
-     * Carga la libreria jqgrid util para la VISTA
-     * @param array $data parametro que agrega mas js o css 
+     * Carga la libreria jqgrid util para la VISTA     
      *  $data['css'] = array ('file.css');
      *  $data['js'] = array ('file.js');
      */
-    protected function loadJqgrid(array $data = array())
+    protected function loadJqgrid()
     {   
         if ($this->flagGrid == false) {           
             $this->dataView['css'][] = "jqgrid/css/cupertino/jquery-ui-1.10.4.custom.min.css";
@@ -69,29 +65,32 @@ class MY_Controller extends CI_Controller {
             $this->dataView['js'][] = "jqgrid/jquery.jqGrid.min.js";
             $this->dataView['js'][] = "jqgrid/fixGridSize.js";
             $this->flagGrid = true;
-        }
-        if (isset($data['css']) && !empty($data['css'])) {            
-            if (is_string($data['css'])){
-                    $this->dataView['css'][] = $data['css'];
-            } elseif (count($data['css'] > 0)) {
-                foreach ($data['css'] as $key => $value) {
-                    $this->dataView['css'][] = $value;
-                }
-            }            
-        } elseif (isset($data['js']) && !empty($data['js'])) {
-            if (is_string($data['js'])) {
-                $this->dataView['js'][] = $data['js'];
-            } elseif (count($data['js'] > 0)) {
-                foreach ($data['js'] as $key => $value) {
-                    $this->dataView['js'][] = $value;
-                }
-            }        
-        }
-        
+        }        
         return $this->dataView;       
     }
+    
+    protected function loadStatic(array $data = array()) {
         
-    
+        foreach ($data as $key => $value) {
+            if ($key === 'css') {
+                if (is_string($data[$key])) {
+                    $this->dataView['css'][] = $value;
+                } elseif (count($data[$key] > 0)) {
+                    foreach ($data['css'] as $llave => $valor) {
+                        $this->dataView['css'][] = $valor;
+                    }                        
+                }
+            } elseif ($key === 'js') {
+                if (is_string($data[$key])) {
+                    $this->dataView['js'][] = $value;
+                } elseif (count($data[$key] > 0)) {
+                    foreach ($data['js'] as $llave => $valor) {
+                        $this->dataView['js'][] = $valor;
+                    }                        
+                }                
+            }   
+        }
 
-    
+        return $this->dataView;
+    }    
 }
