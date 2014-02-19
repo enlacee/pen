@@ -8,14 +8,17 @@
  */
 
 class MY_Controller extends CI_Controller {
+    
     public $auth;
+    
+    public $dataView = array();    
+    private $flagGrid = false;
     
     public function __construct()
     {
         parent::__construct();
         $this->dependenciasBasicas();
-        $this->iniciarLayout();
-        
+        $this->iniciarLayout();        
         //login
         $this->validarUsuario();
     }
@@ -49,4 +52,45 @@ class MY_Controller extends CI_Controller {
             $this->auth = false;
         }
     }
+    
+    
+    /**
+     * Carga la libreria jqgrid util para la VISTA
+     * @param array $data parametro que agrega mas js o css 
+     *  $data['css'] = array ('file.css');
+     *  $data['js'] = array ('file.js');
+     */
+    protected function loadJqgrid(array $data = array())
+    {   
+        if ($this->flagGrid == false) {           
+            $this->dataView['css'][] = "jqgrid/css/cupertino/jquery-ui-1.10.4.custom.min.css";
+            $this->dataView['css'][] = "jqgrid/css/ui.jqgrid.css";                  
+            $this->dataView['js'][] = "jqgrid/i18n/grid.locale-en.js";
+            $this->dataView['js'][] = "jqgrid/jquery.jqGrid.min.js";
+            $this->flagGrid = true;
+        }
+        if (isset($data['css']) && !empty($data['css'])) {            
+            if (is_string($data['css'])){
+                    $this->dataView['css'][] = $data['css'];
+            } elseif (count($data['css'] > 0)) {
+                foreach ($data['css'] as $key => $value) {
+                    $this->dataView['css'][] = $value;
+                }
+            }            
+        } elseif (isset($data['js']) && !empty($data['js'])) {
+            if (is_string($data['js'])) {
+                $this->dataView['js'][] = $data['js'];
+            } elseif (count($data['js'] > 0)) {
+                foreach ($data['js'] as $key => $value) {
+                    $this->dataView['js'][] = $value;
+                }
+            }        
+        }
+        
+        return $this->dataView;       
+    }
+        
+    
+
+    
 }

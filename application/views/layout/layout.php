@@ -12,7 +12,9 @@
     <link href="../../public/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="../../public/css/style.css" rel="stylesheet">
-    
+    <?php if (isset($css)): ?><?php foreach ($css as $key => $value): ?>
+    <link href="../../public/<?php echo $value; ?>" rel="stylesheet">
+    <?php endforeach;?><?php endif;?>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -28,12 +30,15 @@
         <?php require_once "nav_usuario.php"; ?>
     <?php endif; ?>      
 
-    <?php var_dump($user); ?>
+    <?php var_dump($user);?>
     <div class="highlight"><?php echo $content_for_layout; ?></div>
 
     </div> <!-- /container -->
     <script src="../../public/js/vendor/jquery/jquery-1.11.0.js"></script>
     <script src="../../public/dist/js/bootstrap.min.js"></script>
+    <?php if (isset($js)): ?><?php foreach ($js as $key => $value): ?>
+    <script src="../../public/<?php echo $value; ?>"></script>
+    <?php endforeach;?><?php endif;?>    
   </body>
 </html>
 <?php else: ?>

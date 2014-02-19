@@ -17,11 +17,12 @@ class Adm_variable extends MY_Controller {
     public function index()
     {
         $this->load->library('layout');        
-        $data['titulo'] = "Variables";        
-        $this->layout->view('adm-variable/index', $data);         
+        $data['titulo'] = "Variables";
+        $dataLibrary = $this->loadJqgrid(array("js"=>"js/modules_grid/37array.js"));       
         
+        $this->layout->view('adm-variable/index', array_merge($data, $dataLibrary));
     }
-    
+
     /**
      * 
      */
