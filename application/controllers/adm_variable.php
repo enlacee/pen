@@ -18,7 +18,8 @@ class Adm_variable extends MY_Controller {
     {
         $this->load->library('layout');        
         $data['titulo'] = "Variables";
-        $dataLibrary = $this->loadJqgrid(array("js"=>"js/modules_grid/37array.js"));       
+        $this->loadJqgrid();
+        $dataLibrary = $this->loadStatic(array("js"=>"js/modules_grid/37array.js"));
         
         $this->layout->view('adm-variable/index', array_merge($data, $dataLibrary));
     }
@@ -29,7 +30,8 @@ class Adm_variable extends MY_Controller {
     public function nuevo()
     {
         $data['titulo'] = "Nueva Variable";        
-        $this->layout->view('adm-variable/nuevo', $data);          
+        $dataLibrary = $this->loadStatic(array('js' => "js/module/adm-variable/nuevo.js"));        
+        $this->layout->view('adm-variable/nuevo', array_merge($data, $dataLibrary));          
     }
     
 }
