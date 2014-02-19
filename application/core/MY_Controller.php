@@ -67,6 +67,7 @@ class MY_Controller extends CI_Controller {
             $this->dataView['css'][] = "jqgrid/css/ui.jqgrid.css";                  
             $this->dataView['js'][] = "jqgrid/i18n/grid.locale-en.js";
             $this->dataView['js'][] = "jqgrid/jquery.jqGrid.min.js";
+            $this->dataView['js'][] = "jqgrid/fixGridSize.js";
             $this->flagGrid = true;
         }
         if (isset($data['css']) && !empty($data['css'])) {            

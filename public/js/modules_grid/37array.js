@@ -45,7 +45,7 @@ jQuery("#list47").jqGrid({
    		{name:'total',index:'total', width:80,align:"right",sorttype:"float"},		
    		{name:'note',index:'note', width:150, sortable:false}		
    	],
-   	pager: "#plist47",
+   	pager: "#plist47",        
    	viewrecords: true,
    	caption: "Manipulating Array Data",
     onSelectRow: function(id) {
@@ -56,3 +56,6 @@ jQuery("#list47").jqGrid({
         }
     }
 });
+
+//$("#list47").jqGrid('setGridWidth', 250);
+fixGridSize($("#list47"));
