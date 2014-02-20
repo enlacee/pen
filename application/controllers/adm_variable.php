@@ -19,8 +19,7 @@ class Adm_variable extends MY_Controller {
         $this->load->library('layout');        
         $data['titulo'] = "Variables";
         $this->loadJqgrid();
-        $dataLibrary = $this->loadStatic(array("js"=>"js/modules_grid/37array.js"));
-        
+        $dataLibrary = $this->loadStatic(array("js"=>"js/modules_grid/37array.js"));        
         $this->layout->view('adm-variable/index', array_merge($data, $dataLibrary));
     }
 
@@ -31,7 +30,7 @@ class Adm_variable extends MY_Controller {
     {   
         $this->load->helper('form');        
         $this->load->library('form_validation');
-        
+          
         $data['titulo'] = "Nueva Variable";        
         $dataLibrary = $this->loadStatic(array('js' => "js/module/adm-variable/nuevo.js"));
         
@@ -39,18 +38,10 @@ class Adm_variable extends MY_Controller {
             $this->_nuevoValidarForm();
             if ($this->form_validation->run() == false) {
                 // error en alguna validacion
-            } else {    
-                //echo "valido true"; exit;
-                $variable = array();
-                $variable['nombre'] = $this->input->post('nombre', true);
-                $variable['tipo_variable'] = $this->input->post('tipo_variable');
-                $variable['value'] = $this->input->post('value');
-                $variable['patron_a_validar'] = $this->input->post('patron_a_validar');               
-                
-                $this->load->model('Variable_model');
-                $this->Usuario_model->insertar($variable);
-            }            
-
+            } else {
+                // validar datos de lista
+                $this->_registrarVariable();
+            }
         }
         $this->layout->view('adm-variable/nuevo', array_merge($data, $dataLibrary));
     }
@@ -62,6 +53,41 @@ class Adm_variable extends MY_Controller {
     {   
         $this->form_validation->set_rules('nombre','Nombre','trim|required|min_length[2]|maxlength[80]');
         $this->form_validation->set_rules('tipo_variable','Tipo Variable','required');
+        $this->form_validation->set_rules('value');
+        $this->form_validation->set_rules('patron_a_validar');
         
     }
+    
+    private function _registrarVariable()
+    {   
+        $this->load->model('Variable_model');
+        $this->load->library('app_variable');
+        //$this->load->dbforge();
+        
+        $variable = array();
+        $variable['nombre'] = $this->input->post('nombre', true);
+        $variable['tipo_variable'] = $this->input->post('tipo_variable');
+        $variable['value_data'] = $this->input->post('value');
+        $variable['patron_a_validar'] = $this->input->post('patron_a_validar');
+        $variable['nombre_key'] = '';
+        $variable['table_lista'] = '';
+        $variable['fecha_registro'] = date('Y-m-d h:i:s');
+      
+        return $this->Variable_model->insertar($variable);       
+    }
+    
+    /** ------------------------------------------------------------------------
+     * Validacion de datos segun codeigniter
+     * @param type $str
+     * @return boolean
+     */
+    public function username_check($str)
+    {
+        if ($str == 'prueba') {
+            $this->form_validation->set_message('username_check', 'El campo %s no puede contener la palabra "prueba"');
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }            
 }

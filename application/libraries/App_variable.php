@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Description of MY_Variable una variable es una caracteristica del
+ * Description of App_variable una variable es una caracteristica del
  * cuadro estadistico, con ayuda de estos crearemos filtros.
  *
  * @author anb
  */
-class MY_Variable {
+class App_variable {
     
     const TIPO_ENTERO = 1;
     const TIPO_REAL = 2;
@@ -16,34 +16,37 @@ class MY_Variable {
     const NOMBRE_KEY = 'variable_';
     const TABLA_LISTA = 'tabla_lista_';
     
-    private $id_variable;
-    private $nombre;
-    private $nombre_key;
-    private $value_data;
-    private $patron_a_validar;
-    private $tabla_lista;
-    private $activo;
-    
+    private $id_variable = null;
+    private $nombre = null;
+    private $nombre_key = null;
+    private $value_data = null;
+    private $patron_a_validar = null;
+    private $tabla_lista = null;
+    private $activo = null;    
+
     /**
-     * 
+     * Solo si dato es numero o array construira en parte el objeto
      * @param Mix $data 
      * - Array
      * - String
      */
-    public function __construct($data) {
+    public function App_variable($data = '') {
+        
         if (is_array($data)) {
             $this->id_variable = $data['id_variable'];
             $this->nombre = $data['nombre'];
-            $this->nombre_key = MY_Variable::NOMBRE_KEY . $data['id_variable'];
+            $this->nombre_key = self::NOMBRE_KEY . $data['id_variable'];
             $this->value_data = $data['value_data'];
             $this->patron_a_validar = $data['patron_a_validar'];
-            $this->tabla_lista = MY_Variable::TABLA_LISTA . $data['id_variable'];
+            $this->tabla_lista = self::TABLA_LISTA . $data['id_variable'];
             $this->activo = $data['activo'];
-        } else if (is_string($data)) {
-           $this->id_variable = $data; 
+        } else if (is_numeric($data)) {
+           $this->id_variable = $data;
+           $this->nombre_key = self::NOMBRE_KEY . $data;
+           $this->tabla_lista = self::TABLA_LISTA . $data;
         } else {
-            echo "error"; exit;
-        }   
+            //echo "error : ".__CLASS__; exit;
+        }         
     }
 
     public function getId_variable() {
