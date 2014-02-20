@@ -1,5 +1,10 @@
 <h2>Crear Variable</h2>
-<?php echo validation_errors(); ?>
+
+<?php if (validation_errors()):?>
+<div class="alert alert-danger">
+<?php echo validation_errors();?>
+</div>
+<?php endif;?>
 <?php 
 $atributes = array (
     'method' => 'post','class' => 'form-horizontal',
