@@ -1,5 +1,10 @@
 <h2>Crear Variable</h2>
-<form name="form-variable" class="form-horizontal" role="form" action="">
+<?php echo validation_errors(); ?>
+<?php 
+$atributes = array (
+    'method' => 'post','class' => 'form-horizontal',
+    'role' => 'form', 'name'=>'form-variable');
+echo form_open("", $atributes); ?>
   <div class="form-group">
     <label class="col-sm-2 control-label">Nombre</label>
     <div class="col-sm-4">
