@@ -47,7 +47,7 @@ class Variable_model  extends CI_Model {
             $this->db->trans_commit();
             
         } catch (Exception $exc) {            
-            log_message($exc->getTraceAsString());
+            log_message('error', $exc->getTraceAsString());
             $this->db->trans_rollback();
         }   
             

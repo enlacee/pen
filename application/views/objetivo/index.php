@@ -1,0 +1,2 @@
+indice = 
+<?php echo $indice ?>

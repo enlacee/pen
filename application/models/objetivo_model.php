@@ -7,7 +7,7 @@
  */
 class Objetivo_model extends CI_Model {
     
-    protected $_name = 'ac_usuarios';
+    protected $_name = 'ac_objetivos';
     
     public function __construct()
     {
@@ -18,10 +18,9 @@ class Objetivo_model extends CI_Model {
      * Lista de objetivos para el usuario (administrador, usuario)
      * @return type
      */
-    /*public function getObjetivos()
+    public function getObjetivos()
     {
-        //$query = $this->db->get($this->_name, 10);
-       // return $query->result_array();        
+        $query = $this->db->get($this->_name, 10);
+        return $query->result_array();        
     }
-    */
 }

@@ -20,8 +20,9 @@
                   <ul class="dropdown-menu">
                     <li class="dropdown-header">Lista de Objetivos</li> 
                     <li><a href="#">objetivo 1</a></li>
-                    <li><a href="#">objetivo 1</a></li>
-                    <li><a href="#">objetivo 1</a></li>                  
+                    <?php foreach ($user_objetivo as $key => $value): ?>
+                    <li><div class="col-sm-12"><a href="/objetivo/index/<?php echo $value['id_objetivo'] ?>" alt="<?php echo $value['titulo'] ?>"><?php echo $value['titulo'] ?></a></div></li>
+                    <?php endforeach; ?>
                   </ul>
                 </li>
               </ul>

@@ -10,11 +10,12 @@ class Objetivo  extends MY_Controller {
     public function __construct() {
         parent::__construct();
     }
-  /*  
+    
     public function index($indice)
     {
-        echo $indice; exit;
-        
+        $data = array(
+            'indice' => $indice
+        );
+        $this->layout->view('objetivo/index', $data);
     }
-*/
 }

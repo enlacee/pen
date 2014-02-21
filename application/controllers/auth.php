@@ -8,12 +8,17 @@ class Auth  extends MY_Controller {
     
     public function login()
     {   
-        $this->load->model('Usuario_model');        
+        $this->load->model('Usuario_model');
+        $this->load->model('Objetivo_model');
         if ($this->input->post()) {
             $dataUsuario = $this->Usuario_model->auth($this->input->post('email'), $this->input->post('password'));
-            
-            // para enviar mensaje de respuesta xq no se concecto.
-            $bandera = $this->guardarSessionUser($dataUsuario);
+            $dataObjetivo = $this->Objetivo_model->getObjetivos();            
+            $data = array (
+               'user' => $dataUsuario,
+               'user_objetivo' => $dataObjetivo
+            );
+            // para enviar mensaje de respuesta xq no se concreto.
+            $bandera = $this->guardarSessionUser($data);
             redirect('/index');
         } 
     }
@@ -25,7 +30,7 @@ class Auth  extends MY_Controller {
     {   
         $flag = false;
         if (count($data) > 0) {             
-            $this->session->set_userdata('user', $data[0]);
+            $this->session->set_userdata($data);
             $flag = true;
         }
         

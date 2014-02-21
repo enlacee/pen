@@ -35,9 +35,9 @@ class Usuario_model  extends CI_Model {
         es_super_usuario,
         fecha_registro
         FROM '. $this->_name .'
-        WHERE email = "' . $login . '" AND pswd = "' . $pswd . '"'
+        WHERE email = "' . $login . '" AND pswd = "' . $pswd . '" LIMIT 1'               
         );
         
-        return $sql->result_array();        
+        return $sql->row_array();
     }
 }
