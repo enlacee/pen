@@ -9,6 +9,7 @@ class Adm_variable extends MY_Controller {
     public function __construct() 
     {
         parent::__construct();
+        $this->load->library('form_validation');
     }
     
     /**
@@ -34,7 +35,7 @@ class Adm_variable extends MY_Controller {
         $data['titulo'] = "Nueva Variable";        
         $dataLibrary = $this->loadStatic(array('js' => "js/module/adm-variable/nuevo.js"));
         
-        if ($this->input->post()) {            
+        if ($this->input->post()) { 
             $this->_nuevoValidarForm();
             if ($this->form_validation->run() == false) {
                 // error en alguna validacion
@@ -53,16 +54,15 @@ class Adm_variable extends MY_Controller {
     {   
         $this->form_validation->set_rules('nombre','Nombre','trim|required|min_length[2]|maxlength[80]');
         $this->form_validation->set_rules('tipo_variable','Tipo Variable','required');
-        $this->form_validation->set_rules('value');
-        $this->form_validation->set_rules('patron_a_validar');
-        
+        $this->form_validation->set_rules('value', 'Valor','callback_value_check');
+        $this->form_validation->set_rules('patron_a_validar');        
     }
     
     private function _registrarVariable()
     {   
         $this->load->model('Variable_model');
         $this->load->library('app_variable');
-        //$this->load->dbforge();
+        $this->load->dbforge();
         
         $variable = array();
         $variable['nombre'] = $this->input->post('nombre', true);
@@ -70,7 +70,6 @@ class Adm_variable extends MY_Controller {
         $variable['value_data'] = $this->input->post('value');
         $variable['patron_a_validar'] = $this->input->post('patron_a_validar');
         $variable['nombre_key'] = '';
-        $variable['table_lista'] = '';
         $variable['fecha_registro'] = date('Y-m-d h:i:s');
       
         return $this->Variable_model->insertar($variable);       
@@ -81,13 +80,13 @@ class Adm_variable extends MY_Controller {
      * @param type $str
      * @return boolean
      */
-    public function username_check($str)
+    public function value_check($str)
     {
-        if ($str == 'prueba') {
-            $this->form_validation->set_message('username_check', 'El campo %s no puede contener la palabra "prueba"');
+        if (!preg_match('#^{(\w+.*)(,)*}$#i', $str) && !empty($str)) {
+            $this->form_validation->set_message('value_check', 'El campo %s no es valido con este formato: {valor1,valor2}');
             return FALSE;
         } else {
             return TRUE;
-        }
-    }            
+        }        
+    }
 }

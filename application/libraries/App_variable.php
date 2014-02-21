@@ -108,11 +108,74 @@ class App_variable {
     // ----------------------------------------------------------------------//
     // validacion y otras ayudas
     
-    public static function validarTipoLista($data) {
-        // {value1,value2}
+    /**
+     * 
+     * @param string $string cadena con formato {value,value}
+     * @return Array datos en un arreglo simple.
+     */
+    public function getValuesInArray($string = '')
+    {
+        //crear data
+        if (!empty($this->getValue_data()) || !empty ($string)) {
+            if (!empty($this->getValue_data())) {
+                $string = $this->limpiarCadenaLista($this->getValue_data());            
+            } elseif(!empty ($string)) {
+                $string = $this->limpiarCadenaLista($string);
+            } 
+            $string = preg_split('#,#', $string);
+        } else {
+            $string = false;
+        }
         
+        return $string;
+    }
+    
+    /**
+     * Obteger array con formato para guardar directo en la tabla
+     * @return type
+     */
+    public function getValuesInArrayFormatInsert()
+    {
+        $array = $this->getValuesInArray();
+        $new = array();
+        if (is_array($array)) {
+            foreach ($array as $key => $value) {
+                $new[] = array('value' => $value);
+            }
+            return $new;
+        }
+        return $array;
+    }
+    
+    /**
+     *  Formato para usar en $this->dbforge->add_field($fields);
+     * @return array
+     */
+    public static function getFieldTableLista()
+    {
+        $fields = array(
+              'id' => array(
+                  'type' => 'INT',
+                  'constraint' => 6,
+                  'unsigned' => TRUE,
+                  'auto_increment' => TRUE
+              ),
+              'value' => array(
+                  'type' => 'VARCHAR',
+                  'constraint' => '50',
+              )
+          );
         
+          return $fields;
+    }
+    
+    private function limpiarCadenaLista($str)
+    {
+        $str = str_replace("\t", "", $str);        
+        $str = str_replace("{", "", $str);
+        $str = str_replace("}", "", $str);
         
+        return $str;
     }
     
 }
