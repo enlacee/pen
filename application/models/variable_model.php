@@ -21,7 +21,6 @@ class Variable_model  extends CI_Model {
      */
     public function insertar(array $variable = array())
     {   
-        
         $this->db->trans_begin();
         try {
             // 01 : registrar
@@ -50,8 +49,7 @@ class Variable_model  extends CI_Model {
         } catch (Exception $exc) {            
             log_message($exc->getTraceAsString());
             $this->db->trans_rollback();
-        }            
-            
+        }   
             
         $this->db->trans_complete();        
         return $insert_id;
