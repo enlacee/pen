@@ -30,7 +30,7 @@
         <?php require_once "nav_usuario.php"; ?>
     <?php endif; ?>      
 
-    <?php var_dump($user);?>
+    <?php //var_dump($user);?>
     <div class="highlight"><?php echo $content_for_layout; ?></div>
 
     </div> <!-- /container -->

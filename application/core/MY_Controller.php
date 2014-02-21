@@ -25,12 +25,13 @@ class MY_Controller extends CI_Controller {
     private function dependenciasBasicas()
     {
         $this->load->helper('url');
+        //$this->output->enable_profiler(TRUE);
     }
     /**
      * Carga una vista por defecto segun.
      *  - falta implementar interaccion con login
      */    
-    public function iniciarLayout()
+    private function iniciarLayout()
     {
         $this->load->library('layout');
     }

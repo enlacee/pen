@@ -1,4 +1,4 @@
-<h2>Crear Variable</h2>
+<h3>Crear Variable</h3>
 
 <?php if (validation_errors()):?>
 <div class="alert alert-danger">

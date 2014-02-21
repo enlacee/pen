@@ -31,37 +31,39 @@ class Adm_variable extends MY_Controller {
     {   
         $this->load->helper('form');        
         $this->load->library('form_validation');
-          
+        $this->load->library('app_variable');
         $data['titulo'] = "Nueva Variable";        
         $dataLibrary = $this->loadStatic(array('js' => "js/module/adm-variable/nuevo.js"));
         
         if ($this->input->post()) { 
-            $this->_nuevoValidarForm();
+            $this->_nuevoValidarForm($this->input->post('tipo_variable'));
             if ($this->form_validation->run() == false) {
                 // error en alguna validacion
-            } else {
-                // validar datos de lista
+            } else {                
                 $this->_registrarVariable();
+                redirect('adm_variable/index');
             }
         }
+        
         $this->layout->view('adm-variable/nuevo', array_merge($data, $dataLibrary));
     }
     
     /**
      * Validar formulario segun CI
      */
-    private function _nuevoValidarForm()
+    private function _nuevoValidarForm($tipo_variable)
     {   
         $this->form_validation->set_rules('nombre','Nombre','trim|required|min_length[2]|maxlength[80]');
         $this->form_validation->set_rules('tipo_variable','Tipo Variable','required');
-        $this->form_validation->set_rules('value', 'Valor','callback_value_check');
+        if (App_variable::TIPO_LISTA == $tipo_variable) {
+            $this->form_validation->set_rules('value', 'Valor','trim|required|callback_value_check');
+        }
         $this->form_validation->set_rules('patron_a_validar');        
     }
     
     private function _registrarVariable()
     {   
         $this->load->model('Variable_model');
-        $this->load->library('app_variable');
         $this->load->dbforge();
         
         $variable = array();

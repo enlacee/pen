@@ -21,7 +21,9 @@ class Variable_model  extends CI_Model {
      */
     public function insertar(array $variable = array())
     {   
-        $this->db->trans_start(); 
+        
+        $this->db->trans_begin();
+        try {
             // 01 : registrar
             $this->db->insert($this->_name, $variable);
             $insert_id = $this->db->insert_id();
@@ -31,27 +33,25 @@ class Variable_model  extends CI_Model {
             $variable['nombre_key'] = $objVariable->getNombre_key();            
             if ($variable['tipo_variable'] == App_variable::TIPO_LISTA) {
                 $variable['table_lista'] = $objVariable->getTabla_lista();
-                $variable['patron_a_validar'] = '';   
-                
-                //03 : 
-                //registrar ac_tabla_lista_xxx
-                $objVariable->setValue_data($variable['value_data']);                
-                //crear tabla
+                $variable['patron_a_validar'] = '';
+                //03 :
+                $objVariable->setValue_data($variable['value_data']);
                 $this->dbforge->add_field(App_variable::getFieldTableLista());
                 $this->dbforge->add_key('id', TRUE);
                 $this->dbforge->drop_table($objVariable->getTabla_lista());
                 $this->dbforge->create_table($objVariable->getTabla_lista());                
                 //insert data
                 $registrosLista = $objVariable->getValuesInArrayFormatInsert();
-                //echo "ver dataaa "; echo"<pre>"; print_r($registrosLista); echo "<hr>"; var_dump($registrosLista); exit;
-                $this->db->insert_batch($objVariable->getTabla_lista(), $registrosLista); 
-                
-                
-                
-                //$this->dbforge->create_table($objVariable->getTabla_lista());
+                $this->db->insert_batch($objVariable->getTabla_lista(), $registrosLista);
             }
-            $this->actualizar($variable); 
-            //03 : registrar tabla (lista) = value_data
+            $this->actualizar($variable);
+            $this->db->trans_commit();
+            
+        } catch (Exception $exc) {            
+            log_message($exc->getTraceAsString());
+            $this->db->trans_rollback();
+        }            
+            
             
         $this->db->trans_complete();        
         return $insert_id;
