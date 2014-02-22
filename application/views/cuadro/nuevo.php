@@ -1,4 +1,15 @@
+<h3>Crear Cuadro</h3>
 <form action="" method="post">
+    <input type="hidden" name="id_objetivo" value="<?php echo $id_objetivo ?>"/>
+    
+<div class="row">    
+    <div class="col-md-7">
+        <div class="col-sm-3"><label>Titulo del cuadro :</label></div>
+        <div class="col-sm-6"><textarea name="titulo" class="form-control input-sm"></textarea></div>
+        <div class="col-sm-3"></div>
+    </div>    
+</div>
+    
 <div class="row">    
     <div class="col-md-7">
         <div class="col-sm-3"><label>Agregar variable :</label></div>

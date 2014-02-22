@@ -79,25 +79,23 @@ class Adm_variable extends MY_Controller {
     
     /**
      * lista de variables (busqueda con 1 paramaetro)
+     * ojo error con GET
      */
-    public function jsonListaVariable($param = '')
+    public function jsonListaVariable()
     {   
         $this->load->model('Variable_model');
-    
-        $data = $this->Variable_model->buscar($param);
-        $json = array();
-        foreach ($data as $key => $value) {
-            $json[$value['id_variable']] = $value['nombre'];
-        }
-
-        /*$json = array ( 
-            array('value' => '1', 'key' => 'rios'),
-            array('value' => '2', 'key' => 'ramos')
-        );*/
-             
         
-        $this->output->set_content_type('application/json');
-        $this->output->set_output(json_encode($json));        
+        if ($this->input->post()) {
+            $term = $this->input->post('term');
+            $data = $this->Variable_model->buscar($term);
+            $json = array(); 
+            foreach ($data as $key => $value) {
+                $json[$value['id_variable']] = $value['nombre'];
+            }            
+            /*$json = array (array('value' => '1', 'key' => 'rios'));*/
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($json));
+        }
     }
 
 

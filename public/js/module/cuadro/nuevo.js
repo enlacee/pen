@@ -4,8 +4,8 @@ $(function () {
     $variable.autocomplete({
         source: function (request, response) {
            $.ajax({
-               url: '/adm_variable/jsonlistavariable/'+$variable.val(),
-               type: 'GET',
+               url: '/adm_variable/jsonlistavariable/',
+               type: 'post',
                dataType: 'json',
                data: request,
                success: function (data) {
@@ -25,11 +25,16 @@ $(function () {
         minLength: 2
     });
     
-    // agregar
-    $('#add').click(function(){ 
-        var $input = '<input type="text" name="variableData[]" value="'+$variable.val()+'" readonly/>';
-        $("#lista-variables").append('<p> - '+$input+'</p>');
-        $variable.val('')
-                .focus();
+    $('#add').click(function() { 
+        var patron = /^([a-zA-Z ñ Ñ á Á éÉ íÍ óÓ úÚ 0-9]+)(:)(\d+)$/;
+        if (patron.test($variable.val())) {
+            var $input = '<input type="text" name="variableData[]" value="'+$variable.val()+'" readonly class="form-control input-sm"/>';
+            $("#lista-variables").append('<p>'+$input+'</p>');
+            $variable.val('')
+                    .focus();
+        } else {
+            alert("Expresion no es adecuado corregir.");
+        }
+
     });
 });

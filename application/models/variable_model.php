@@ -72,14 +72,14 @@ class Variable_model  extends CI_Model {
      */
     public function buscar($texto = '')
     {
-        if(!empty($texto)) {
-            $sql = $this->db->query(
-                    "SELECT
+        if (!empty($texto)) {
+            $query = "SELECT
                     id_variable,
                     nombre
                     FROM ac_variables 
                     WHERE nombre 
-                    LIKE '%".$texto."%' LIMIT 5");            
+                    LIKE '%".$texto."%' LIMIT 7";
+            $sql = $this->db->query($query);
             return $sql->result_array();
         }
     }
