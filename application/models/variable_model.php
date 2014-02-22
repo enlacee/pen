@@ -64,4 +64,23 @@ class Variable_model  extends CI_Model {
             $this->db->update($this->_name ,$data);
         }        
     }
+    
+    /**
+     * 
+     * @param type $texto a buscar
+     * @return Array lista de variables
+     */
+    public function buscar($texto = '')
+    {
+        if(!empty($texto)) {
+            $sql = $this->db->query(
+                    "SELECT
+                    id_variable,
+                    nombre
+                    FROM ac_variables 
+                    WHERE nombre 
+                    LIKE '%".$texto."%' LIMIT 5");            
+            return $sql->result_array();
+        }
+    }
 }

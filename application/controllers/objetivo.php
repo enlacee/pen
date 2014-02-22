@@ -14,8 +14,11 @@ class Objetivo  extends MY_Controller {
     public function index($indice)
     {
         $data = array(
-            'indice' => $indice
+            'titulo' => 'Objetivos',
+            'idObjetivo' => $indice
         );
-        $this->layout->view('objetivo/index', $data);
-    }
+        $this->loadJqgrid();
+        $dataLibrary = $this->loadStatic(array("js"=>"js/modules_grid/37array.js"));
+        $this->layout->view('objetivo/index', array_merge($data, $dataLibrary));
+    }    
 }
