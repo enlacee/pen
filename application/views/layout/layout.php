@@ -30,7 +30,7 @@
         <?php require_once "nav_usuario.php"; ?>
     <?php endif; ?>      
     <!-- Mensajes yelowBox -->
-    <?php if ((isset($mensajeBox))): ?>    
+    <?php if (isset($mensajeBox) && $mensajeBox != false): ?>    
     <div class="alert alert-warning fade in mensajeBox">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
           <?php echo $mensajeBox; ?>

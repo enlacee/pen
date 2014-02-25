@@ -18,7 +18,8 @@ class Adm_variable extends MY_Controller {
     public function index()
     {
         $this->load->library('layout');        
-        $data['titulo'] = "Variables";
+        $data['titulo'] = "Variables";        
+        $data['mensajeBox'] = $this->session->flashdata('mensajeBox');
         $this->loadJqgrid();
         $dataLibrary = $this->loadStatic(array("js"=>"js/modules_grid/37array.js"));        
         $this->layout->view('adm-variable/index', array_merge($data, $dataLibrary));
@@ -41,6 +42,7 @@ class Adm_variable extends MY_Controller {
                 // error en alguna validacion
             } else {                
                 $this->_registrarVariable();
+                $this->session->set_flashdata('mensajeBox', 'Se Registro corectamente la variable <strong>'.$this->input->post('nombre', true).'</strong>');
                 redirect('adm_variable/index');
             }
         }
