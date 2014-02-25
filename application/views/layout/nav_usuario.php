@@ -14,7 +14,6 @@
             <div class="navbar-collapse collapse">              
               <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Inicio</a></li>
-                <li><a href="/adm_variable/index">Variables</a></li>              
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Objetivos <b class="caret"></b></a>
                   <ul class="dropdown-menu">

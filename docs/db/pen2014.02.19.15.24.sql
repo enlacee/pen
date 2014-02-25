@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 25-02-2014 a las 12:35:23
+-- Tiempo de generación: 24-02-2014 a las 12:25:11
 -- Versión del servidor: 5.5.34-0ubuntu0.13.10.1
 -- Versión de PHP: 5.5.3-1ubuntu2.1
 
@@ -29,33 +29,26 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `ac_cuadros` (
   `id_cuadro` int(11) NOT NULL AUTO_INCREMENT,
   `id_objetivo` int(11) NOT NULL,
-  `creado_por` int(11) NOT NULL COMMENT 'id_usuario',
   `titulo` varchar(200) DEFAULT NULL,
+  `creado_por` int(11) NOT NULL COMMENT 'id_usuario',
   `table_cuadro` varchar(30) DEFAULT NULL COMMENT 'Nombre de la tabla que se generara.\ntable_cuadro_.......',
   `fecha_registro` datetime DEFAULT NULL,
   `activo` tinyint(4) DEFAULT '1',
   PRIMARY KEY (`id_cuadro`),
-  KEY `fk_ac_cuadros_ac_objetivos1_idx` (`id_objetivo`),
-  KEY `fk_creador_por_administrador` (`creado_por`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Cuadros estadisticos' AUTO_INCREMENT=15 ;
+  UNIQUE KEY `titulo_UNIQUE` (`titulo`),
+  KEY `fk_creador_por_administrador` (`creado_por`),
+  KEY `fk_ac_cuadros_ac_objetivos1_idx` (`id_objetivo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Cuadros estadisticos' AUTO_INCREMENT=6 ;
 
 --
 -- Volcado de datos para la tabla `ac_cuadros`
 --
 
-INSERT INTO `ac_cuadros` (`id_cuadro`, `id_objetivo`, `creado_por`, `titulo`, `table_cuadro`, `fecha_registro`, `activo`) VALUES
-(1, 1, 0, 'cuadro manual', 'xxx', '2014-02-05 00:00:00', 1),
-(2, 1, 0, 'sssss', '', '2014-02-24 08:13:21', 1),
-(3, 1, 0, 'ddddddddd', '', '2014-02-24 08:15:22', 1),
-(4, 1, 0, 'nuevo', '', '2014-02-24 08:17:58', 1),
-(5, 1, 0, 'anibal copitan', '', '2014-02-24 08:22:19', 1),
-(6, 1, 0, 'echo', 'tabla_cuadro_6', '2014-02-24 08:23:20', 1),
-(7, 2, 1, 'ds', 'tabla_cuadro_7', '2014-02-25 01:16:20', 1),
-(8, 2, 1, 'cuadro pepe lucho 2', 'tabla_cuadro_8', '2014-02-25 01:35:06', 1),
-(9, 2, 1, '22222222', 'tabla_cuadro_9', '2014-02-25 01:37:47', 1),
-(11, 1, 1, 'pepe', 'tabla_cuadro_11', '2014-02-25 01:44:00', 1),
-(13, 1, 1, 'EDOOOOO', 'tabla_cuadro_13', '2014-02-25 02:36:17', 1),
-(14, 1, 1, 'CUADRADO', 'tabla_cuadro_14', '2014-02-25 12:34:18', 1);
+INSERT INTO `ac_cuadros` (`id_cuadro`, `id_objetivo`, `titulo`, `creado_por`, `table_cuadro`, `fecha_registro`, `activo`) VALUES
+(2, 1, 'nuevo 0000', 1, '', '2014-02-22 03:55:58', 1),
+(3, 2, '22222', 1, '', '2014-02-22 04:11:48', 1),
+(4, 2, 'a', 1, '', '2014-02-24 12:19:37', 1),
+(5, 2, 'cuadro', 1, '', '2014-02-24 12:20:19', 1);
 
 -- --------------------------------------------------------
 
@@ -65,11 +58,11 @@ INSERT INTO `ac_cuadros` (`id_cuadro`, `id_objetivo`, `creado_por`, `titulo`, `t
 
 CREATE TABLE IF NOT EXISTS `ac_cuadros_filtros` (
   `id_cuadro_filtro` int(11) NOT NULL AUTO_INCREMENT,
-  `id_cuadro` int(11) NOT NULL,
   `titulo` varchar(45) DEFAULT NULL,
   `value_data` text COMMENT 'Almacena el filtro que se realiza.\n{key:value}\n{sexo:{1:M, 2:F}, anio:2014}',
+  `ac_cuadros_id_cuadro` int(11) NOT NULL,
   PRIMARY KEY (`id_cuadro_filtro`),
-  KEY `fk_ac_cuadros_filtros_ac_cuadros1_idx` (`id_cuadro`)
+  KEY `fk_ac_cuadros_filtros_ac_cuadros1_idx` (`ac_cuadros_id_cuadro`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Registro de filtros realizados  por los cuadros estadisticos.' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -100,30 +93,12 @@ CREATE TABLE IF NOT EXISTS `ac_cuadros_usuarios` (
 CREATE TABLE IF NOT EXISTS `ac_cuadros_variables` (
   `id_cuadro_variable` int(11) NOT NULL AUTO_INCREMENT,
   `id_cuadro` int(11) NOT NULL,
-  `id_variable` int(11) NOT NULL,
-  `es_lista_multiple` tinyint(4) DEFAULT '0' COMMENT 'selecccion combo:\n0 = simple\n1 = multiple\n',
+  `id_variable` int(11) DEFAULT NULL,
+  `form_lista_multiple` tinyint(4) DEFAULT '0' COMMENT 'selecccion combo:\n0 = simple\n1 = multiple\n',
   PRIMARY KEY (`id_cuadro_variable`),
-  KEY `fk_ac_cuadros_variables_uno` (`id_variable`),
-  KEY `fk_ac_cuadros_variables_dos` (`id_cuadro`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Creacion del cuadro estadistico\ncuadro + variables\nFORMULARIO PARA EL USUARIO.' AUTO_INCREMENT=13 ;
-
---
--- Volcado de datos para la tabla `ac_cuadros_variables`
---
-
-INSERT INTO `ac_cuadros_variables` (`id_cuadro_variable`, `id_cuadro`, `id_variable`, `es_lista_multiple`) VALUES
-(1, 7, 4, 1),
-(2, 7, 6, NULL),
-(3, 8, 6, NULL),
-(4, 8, 4, 0),
-(5, 9, 4, 0),
-(6, 9, 3, 0),
-(7, 11, 4, 0),
-(8, 13, 4, 0),
-(9, 14, 9, NULL),
-(10, 14, 11, NULL),
-(11, 14, 1, 0),
-(12, 14, 5, 1);
+  KEY `fk_ac_cuadros_variables_ac_cuadros_usuarios1_idx` (`id_cuadro`),
+  KEY `fk_ac_cuadros_variables_ac_variables1_idx` (`id_variable`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Creacion del cuadro estadistico\ncuadro + variables' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -137,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `ac_listas` (
   `key` varchar(20) DEFAULT NULL,
   `value` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_ac_variables` (`id_variable`) USING BTREE
+  KEY `fk_ac_listas_ac_variables1_idx` (`id_variable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='almacena los datos cuando el tipo de variable  es una lista.' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -159,103 +134,6 @@ CREATE TABLE IF NOT EXISTS `ac_objetivos` (
 INSERT INTO `ac_objetivos` (`id_objetivo`, `titulo`) VALUES
 (1, '1 Oportunidades y resultados educativos de igual calidad para todos.'),
 (2, '2 Estudiantes e Instituciones que logran aprendizajes pertinentes y de calidad.');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ac_tabla_cuadro_6`
---
-
-CREATE TABLE IF NOT EXISTS `ac_tabla_cuadro_6` (
-  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
-  `variable_4` int(6) NOT NULL,
-  `variable_6` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Volcado de datos para la tabla `ac_tabla_cuadro_6`
---
-
-INSERT INTO `ac_tabla_cuadro_6` (`id`, `variable_4`, `variable_6`) VALUES
-(1, 1, 'asds'),
-(2, 5, 'asdsad');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ac_tabla_cuadro_7`
---
-
-CREATE TABLE IF NOT EXISTS `ac_tabla_cuadro_7` (
-  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
-  `variable_4` int(6) NOT NULL,
-  `variable_6` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ac_tabla_cuadro_8`
---
-
-CREATE TABLE IF NOT EXISTS `ac_tabla_cuadro_8` (
-  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
-  `variable_6` varchar(20) NOT NULL,
-  `variable_4` int(6) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ac_tabla_cuadro_9`
---
-
-CREATE TABLE IF NOT EXISTS `ac_tabla_cuadro_9` (
-  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ac_tabla_cuadro_11`
---
-
-CREATE TABLE IF NOT EXISTS `ac_tabla_cuadro_11` (
-  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
-  `variable_4` int(6) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ac_tabla_cuadro_13`
---
-
-CREATE TABLE IF NOT EXISTS `ac_tabla_cuadro_13` (
-  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
-  `variable_4` int(6) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ac_tabla_cuadro_14`
---
-
-CREATE TABLE IF NOT EXISTS `ac_tabla_cuadro_14` (
-  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
-  `variable_9` varchar(20) NOT NULL,
-  `variable_11` varchar(20) NOT NULL,
-  `variable_1` int(6) NOT NULL,
-  `variable_5` int(6) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -432,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `ac_variables` (
   `fecha_registro` datetime DEFAULT NULL,
   `activo` tinyint(4) DEFAULT '1' COMMENT 'Activo : si esta disponible esta variable\npara asignar a nuevos cuadros estadisticos.\n',
   PRIMARY KEY (`id_variable`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='lista de variables que se usan para para un cuadros estadisticos.' AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='lista de variables que se usan para para un cuadros estadisticos.' AUTO_INCREMENT=7 ;
 
 --
 -- Volcado de datos para la tabla `ac_variables`
@@ -444,14 +322,7 @@ INSERT INTO `ac_variables` (`id_variable`, `nombre`, `nombre_key`, `tipo_variabl
 (3, 'tipo de gestion', 'variable_3', 'LISTA', '{privada,publica}', '', 'tabla_lista_3', 1, '2014-02-22 02:26:04', 1),
 (4, 'sexo', 'variable_4', 'LISTA', '{masculino,femenino}', '', 'tabla_lista_4', 1, '2014-02-22 02:26:21', 1),
 (5, 'area geografica', 'variable_5', 'LISTA', '{urbano,rural}', '', 'tabla_lista_5', 1, '2014-02-22 02:26:49', 1),
-(6, 'poblacion', 'variable_6', 'ENTERO', '', '', NULL, 1, '2014-02-22 02:32:50', 1),
-(7, 'nombre', 'variable_7', 'CADENA', '', '', NULL, 1, '2014-02-25 02:21:13', 1),
-(8, 'mi variable', 'variable_8', 'CADENA', '', '', NULL, 1, '2014-02-25 02:25:37', 1),
-(9, 'nueva variable', 'variable_9', 'CADENA', '', '', NULL, 1, '2014-02-25 02:28:44', 1),
-(10, 'ffff', 'variable_10', 'ENTERO', '', '', NULL, 1, '2014-02-25 02:39:51', 1),
-(11, 'nueva variable 123', 'variable_11', 'REAL', '', '', NULL, 1, '2014-02-25 10:26:45', 1),
-(12, 'nueva bariable', 'variable_12', 'CADENA', '', '', NULL, 1, '2014-02-25 12:23:28', 1),
-(13, 'contador', 'variable_13', 'ENTERO', '', '', NULL, 1, '2014-02-25 12:32:42', 1);
+(6, 'poblacion', 'variable_6', 'ENTERO', '', '', NULL, 1, '2014-02-22 02:32:50', 1);
 
 --
 -- Restricciones para tablas volcadas
@@ -461,35 +332,35 @@ INSERT INTO `ac_variables` (`id_variable`, `nombre`, `nombre_key`, `tipo_variabl
 -- Filtros para la tabla `ac_cuadros`
 --
 ALTER TABLE `ac_cuadros`
-  ADD CONSTRAINT `fk_ac_cuadros_ac_objetivos1` FOREIGN KEY (`id_objetivo`) REFERENCES `ac_objetivos` (`id_objetivo`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_creador_por_administrador` FOREIGN KEY (`creado_por`) REFERENCES `ac_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_ac_cuadros_ac_objetivos1` FOREIGN KEY (`id_objetivo`) REFERENCES `ac_objetivos` (`id_objetivo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_creador_por_administrador` FOREIGN KEY (`creado_por`) REFERENCES `ac_usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `ac_cuadros_filtros`
 --
 ALTER TABLE `ac_cuadros_filtros`
-  ADD CONSTRAINT `fk_ac_cuadros_filtros_ac_cuadros1` FOREIGN KEY (`id_cuadro`) REFERENCES `ac_cuadros` (`id_cuadro`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_ac_cuadros_filtros_ac_cuadros1` FOREIGN KEY (`ac_cuadros_id_cuadro`) REFERENCES `ac_cuadros` (`id_cuadro`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `ac_cuadros_usuarios`
 --
 ALTER TABLE `ac_cuadros_usuarios`
-  ADD CONSTRAINT `fk_ac_cuadros_usuarios_ac_cuadros1` FOREIGN KEY (`id_cuadro`) REFERENCES `ac_cuadros` (`id_cuadro`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_ac_cuadros_usuarios_ac_usuarios2` FOREIGN KEY (`usuario_asignado`) REFERENCES `ac_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_ac_cuadros_usuarios_ac_usuarios1` FOREIGN KEY (`id_usuario`) REFERENCES `ac_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_ac_cuadros_usuarios_ac_cuadros1` FOREIGN KEY (`id_cuadro`) REFERENCES `ac_cuadros` (`id_cuadro`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ac_cuadros_usuarios_ac_usuarios1` FOREIGN KEY (`id_usuario`) REFERENCES `ac_usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ac_cuadros_usuarios_ac_usuarios2` FOREIGN KEY (`usuario_asignado`) REFERENCES `ac_usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `ac_cuadros_variables`
 --
 ALTER TABLE `ac_cuadros_variables`
-  ADD CONSTRAINT `fk_ac_cuadros_variables_uno` FOREIGN KEY (`id_variable`) REFERENCES `ac_variables` (`id_variable`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_ac_cuadros_variables_dos` FOREIGN KEY (`id_cuadro`) REFERENCES `ac_cuadros` (`id_cuadro`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_ac_cuadros_variables_ac_cuadros_usuarios1` FOREIGN KEY (`id_cuadro`) REFERENCES `ac_cuadros_usuarios` (`id_cuadro_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ac_cuadros_variables_ac_variables1` FOREIGN KEY (`id_variable`) REFERENCES `ac_variables` (`id_variable`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `ac_listas`
 --
 ALTER TABLE `ac_listas`
-  ADD CONSTRAINT `fk_ac_variables` FOREIGN KEY (`id_variable`) REFERENCES `ac_variables` (`id_variable`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_ac_listas_ac_variables1` FOREIGN KEY (`id_variable`) REFERENCES `ac_variables` (`id_variable`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

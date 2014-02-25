@@ -21,7 +21,7 @@ class Index extends MY_Controller {
             if ($usuario['es_super_usuario'] == '1') {
                 redirect('/adm_variable');
             } else {
-                redirect('/usr_home'); 
+                redirect('/usuario/index'); 
             }
         }
     }

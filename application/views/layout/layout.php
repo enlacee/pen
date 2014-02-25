@@ -22,8 +22,7 @@
     <![endif]-->
   </head>  
   <body>
-    <div class="container ">          
-    
+    <div class="container ">
     <?php if ($user['es_super_usuario'] == '1'): ?>
         <?php require_once "nav_administrador.php"; ?>
     <?php elseif ($user['es_super_usuario'] == '0'): ?>
