@@ -21,7 +21,7 @@ class Adm_variable extends MY_Controller {
         $data['titulo'] = "Variables";        
         $data['mensajeBox'] = $this->session->flashdata('mensajeBox');
         $this->loadJqgrid();
-        $dataLibrary = $this->loadStatic(array("js"=>"js/modules_grid/37array.js"));        
+        $dataLibrary = $this->loadStatic(array("js"=>"js/module/adm-variable/index.js"));        
         $this->layout->view('adm-variable/index', array_merge($data, $dataLibrary));
     }
 
@@ -42,7 +42,7 @@ class Adm_variable extends MY_Controller {
                 // error en alguna validacion
             } else {                
                 $this->_registrarVariable();
-                $this->session->set_flashdata('mensajeBox', 'Se Registro corectamente la variable <strong>'.$this->input->post('nombre', true).'</strong>');
+                $this->session->set_flashdata('mensajeBox', 'Se registro corectamente la variable: <strong>'.$this->input->post('nombre', true).'</strong>');
                 redirect('adm_variable/index');
             }
         }
@@ -114,5 +114,134 @@ class Adm_variable extends MY_Controller {
         } else {
             return TRUE;
         }        
+    }
+    
+    /**
+     * Listar variables
+     */
+    public function jqlistar()
+    {   
+        $this->load->model('Variable_model');
+        $responce = new stdClass();
+        
+        $page = $this->input->get('page');
+        $limit = $this->input->get('rows');
+        $sidx = $this->input->get('sidx');
+        $sord = $this->input->get('sord');
+        if (!$sidx) $sidx = 1;
+        
+
+        $dataGridString = null;
+        if (isset($_GET['searchField']) && ($_GET['searchString'] != null)) {
+            $operadores["eq"] = "=";
+            $operadores["ne"] = "<>";
+            $operadores["lt"] = "<";
+            $operadores["le"] = "<=";
+            $operadores["gt"] = ">";
+            $operadores["ge"] = ">=";
+            $operadores["cn"] = "LIKE";
+            if ($_GET['searchOper'] == "cn") {
+                $dataGridString = $_GET['searchField'] . " " . $operadores[$_GET['searchOper']] . " '%" . $_GET['searchString'] . "%' ";
+            } else {
+                $dataGridString = $_GET['searchField'] . " " . $operadores[$_GET['searchOper']] . "'" . $_GET['searchString'] . "'";
+            }                
+        }        
+        $count = $this->Variable_model->jqListar($dataGridString, true);
+        
+        if ($count > 0) {
+            $total_pages = ceil($count/$limit);
+        } else {
+           $total_pages = 0; 
+        }
+        if ($page > $total_pages) $page = $total_pages;
+        $start = $limit * $page - $limit;         
+
+        $responce->page = $page;
+        $responce->total = $total_pages;
+        $responce->records = $count;
+        
+        $dataGrid = array (
+            'oderby' => array('sidx' => $sidx, 'sord' => $sord),
+            'limit' => $limit,
+            'start' => $start,
+            'string' => $dataGridString);        
+        $result = $this->Variable_model->jqListar($dataGrid);
+        $i = 0;
+        while (list($clave, $row) = each($result)) {
+            $responce->rows[$i]['id'] = $row['id_variable'];
+            $responce->rows[$i]['cell'] = array(
+                $row['id_variable'],
+                $row['nombre'],
+                $row['tipo_variable'],
+                $row['fecha_registro']);
+            $i++;        
+        }
+        //echo json_encode($responce); 
+        $this->output->set_content_type('application/json');
+        $this->output->set_output(json_encode($responce));        
+        
+      
+        
+        
+  /*      
+        mysql_select_db($database) or die("Error conecting to db.");
+        $result = mysql_query("SELECT COUNT(*) AS count FROM invheader a, clients b WHERE a.client_id=b.client_id");
+        $row = mysql_fetch_array($result,MYSQL_ASSOC);
+        $count = $row['count'];
+
+        if( $count >0 ) {
+                $total_pages = ceil($count/$limit);
+        } else {
+                $total_pages = 0;
+        }
+        if ($page > $total_pages) $page=$total_pages;
+        $start = $limit*$page - $limit; // do not put $limit*($page - 1)
+        $SQL = "SELECT a.id, a.invdate, b.name, a.amount,a.tax,a.total,a.note FROM invheader a, clients b WHERE a.client_id=b.client_id ORDER BY $sidx $sord LIMIT $start , $limit";
+        $result = mysql_query( $SQL ) or die("Couldn t execute query.".mysql_error());
+*/
+        
+        
+        
+        
+        
+        
+        
+        /*
+        // ----
+        $page = $_GET['page']; // get the requested page
+        $limit = $_GET['rows']; // get how many rows we want to have into the grid
+        $sidx = $_GET['sidx']; // get index row - i.e. user click to sort
+        $sord = $_GET['sord']; // get the direction
+        if(!$sidx) $sidx =1;
+        // connect to the database
+        $db = mysql_connect($dbhost, $dbuser, $dbpassword)
+        or die("Connection Error: " . mysql_error());
+
+        mysql_select_db($database) or die("Error conecting to db.");
+        $result = mysql_query("SELECT COUNT(*) AS count FROM invheader a, clients b WHERE a.client_id=b.client_id");
+        $row = mysql_fetch_array($result,MYSQL_ASSOC);
+        $count = $row['count'];
+
+        if( $count >0 ) {
+                $total_pages = ceil($count/$limit);
+        } else {
+                $total_pages = 0;
+        }
+        if ($page > $total_pages) $page=$total_pages;
+        $start = $limit*$page - $limit; // do not put $limit*($page - 1)
+        $SQL = "SELECT a.id, a.invdate, b.name, a.amount,a.tax,a.total,a.note FROM invheader a, clients b WHERE a.client_id=b.client_id ORDER BY $sidx $sord LIMIT $start , $limit";
+        $result = mysql_query( $SQL ) or die("Couldn t execute query.".mysql_error());
+
+        $responce->page = $page;
+        $responce->total = $total_pages;
+        $responce->records = $count;
+        $i=0;
+        while($row = mysql_fetch_array($result,MYSQL_ASSOC)) {
+            $responce->rows[$i]['id']=$row[id];
+            $responce->rows[$i]['cell']=array($row[id],$row[invdate],$row[name],$row[amount],$row[tax],$row[total],$row[note]);
+            $i++;
+        }        
+        echo json_encode($responce);   
+        */
     }
 }
