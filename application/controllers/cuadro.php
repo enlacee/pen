@@ -47,6 +47,7 @@ class Cuadro extends MY_Controller {
     private function _nuevoValidarForm()
     {
         $this->form_validation->set_rules('titulo','Titulo','trim|required|min_length[2]');
+        $this->form_validation->set_rules('variableData','Variables','required');
         
     }
     
