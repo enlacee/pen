@@ -15,13 +15,19 @@ class Cuadro extends MY_Controller {
     {
         $this->load->helper('form');        
         $this->load->library('form_validation');
+        $this->load->library('app_variable');
+        $this->load->library('app_cuadro');        
         
         $numero = (int)$idObjetivo;
-        if ($numero > 0) { // 0 = false
-            
-            if($this->input->post()) {
-                $this->_registrar();
-                redirect("objetivo/index/".$this->input->post('id_objetivo'));
+        if ($numero > 0) { // 0 = false            
+            if($this->input->post()) {                
+                $this->_nuevoValidarForm();
+                if ($this->form_validation->run() == false) {
+                    // error en alguna validacion
+                } else {                
+                    $this->_registrarCuadro();
+                    redirect("objetivo/index/".$this->input->post('id_objetivo'));
+                }
             }
             
             $data = array(
@@ -35,19 +41,28 @@ class Cuadro extends MY_Controller {
         }
     }
     
-    private function _registrar()
+    /**
+     * 
+     */
+    private function _nuevoValidarForm()
+    {
+        $this->form_validation->set_rules('titulo','Titulo','trim|required|min_length[2]');
+        
+    }
+    
+    private function _registrarCuadro()
     {
         $this->load->model('Cuadro_model');
         $this->load->dbforge();
-        
+        //01
         $cuadro = array();
         $cuadro['id_objetivo'] = $this->input->post('id_objetivo');
         $cuadro['titulo'] = $this->input->post('titulo');       
         $cuadro['creado_por'] = $this->idUsuario;
         $cuadro['table_cuadro'] = '';
         $cuadro['fecha_registro'] = date('Y-m-d h:i:s');
-      
+        //02
+        $cuadro['variableData'] = $this->input->post('variableData');
         return $this->Cuadro_model->insertar($cuadro);
-    }
-    
+    }    
 }

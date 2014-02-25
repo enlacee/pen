@@ -12,7 +12,13 @@ class App_variable {
     const TIPO_REAL = 2;
     const TIPO_BINARIO = 3;
     const TIPO_CADENA = 4;
-    const TIPO_LISTA = 5;
+    const TIPO_LISTA = 5;    
+    const TIPO_ENTERO_STRING = 'ENTERO';
+    const TIPO_REAL_STRING = 'REAL';
+    const TIPO_BINARIO_STRING = 'BINARIO';
+    const TIPO_CADENA_STRING = 'CADENA';
+    const TIPO_LISTA_STRING = 'LISTA';    
+    
     const NOMBRE_KEY = 'variable_';
     const TABLA_LISTA = 'tabla_lista_';
     
@@ -176,6 +182,5 @@ class App_variable {
         $str = str_replace("}", "", $str);
         
         return $str;
-    }
-    
+    }    
 }

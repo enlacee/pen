@@ -46,7 +46,8 @@ class Variable_model  extends CI_Model {
             $this->actualizar($variable);
             $this->db->trans_commit();
             
-        } catch (Exception $exc) {            
+        } catch (Exception $exc) {
+            log_message('error', 'Error en : '.__CLASS__.__FUNCTION__);
             log_message('error', $exc->getTraceAsString());
             $this->db->trans_rollback();
         }   
@@ -75,6 +76,7 @@ class Variable_model  extends CI_Model {
         if (!empty($texto)) {
             $query = "SELECT
                     id_variable,
+                    tipo_variable,
                     nombre
                     FROM ac_variables 
                     WHERE nombre 

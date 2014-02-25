@@ -32,7 +32,7 @@ class Adm_variable extends MY_Controller {
         $this->load->helper('form');        
         $this->load->library('form_validation');
         $this->load->library('app_variable');
-        $data['titulo'] = "Nueva Variable";        
+        $data['titulo'] = "Nueva Variable";
         $dataLibrary = $this->loadStatic(array('js' => "js/module/adm-variable/nuevo.js"));
         
         if ($this->input->post()) { 
@@ -90,7 +90,7 @@ class Adm_variable extends MY_Controller {
             $data = $this->Variable_model->buscar($term);
             $json = array(); 
             foreach ($data as $key => $value) {
-                $json[$value['id_variable']] = $value['nombre'];
+                $json[$value['id_variable']] = $value['nombre'] . "|". $value['tipo_variable'];
             }            
             /*$json = array (array('value' => '1', 'key' => 'rios'));*/
             $this->output->set_content_type('application/json');
