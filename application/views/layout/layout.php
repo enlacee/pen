@@ -29,7 +29,14 @@
     <?php elseif ($user['es_super_usuario'] == '0'): ?>
         <?php require_once "nav_usuario.php"; ?>
     <?php endif; ?>      
-
+    <!-- Mensajes yelowBox -->
+    <?php if ((isset($mensajeBox))): ?>    
+    <div class="alert alert-warning fade in mensajeBox">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <?php echo $mensajeBox; ?>
+    </div>
+    <?php endif; ?>
+    
     <?php //var_dump($user);?>
     <div class="highlight"><?php echo $content_for_layout; ?></div>
 
