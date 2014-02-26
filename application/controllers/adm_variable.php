@@ -20,9 +20,9 @@ class Adm_variable extends MY_Controller {
         $this->load->library('layout');        
         $data['titulo'] = "Variables";        
         $data['mensajeBox'] = $this->session->flashdata('mensajeBox');
-        $this->loadJqgrid();
-        $dataLibrary = $this->loadStatic(array("js"=>"js/module/adm-variable/index.js"));        
-        $this->layout->view('adm-variable/index', array_merge($data, $dataLibrary));
+        $this->loadJqgrid();        
+        $this->loadStatic(array("js"=>"js/module/adm-variable/index.js"));
+        $this->layout->view('adm-variable/index', $data);
     }
 
     /**
