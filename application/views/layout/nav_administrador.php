@@ -22,9 +22,10 @@
                     <li><a href="#">objetivo 1</a></li>
                     <?php foreach ($user_objetivo as $key => $value): ?>
                     <li><div class="col-sm-12"><a href="/objetivo/index/<?php echo $value['id_objetivo'] ?>" alt="<?php echo $value['titulo'] ?>"><?php echo $value['titulo'] ?></a></div></li>
-                    <?php endforeach; ?>
+                    <?php endforeach; ?>                    
                   </ul>
                 </li>
+                <li><a href="/usuario/index">Usuarios</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                   <li><a href="#"><?php echo $user['nombre'] ." ". $user['apellido']; ?></a></li>  

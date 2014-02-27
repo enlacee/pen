@@ -69,6 +69,7 @@ class MY_Controller extends CI_Controller {
             $this->dataView['js'][] = "jqgrid/fixGridSize.js";
             $this->flagGrid = true;
         }        
+        $this->load->vars($this->dataView);
         return $this->dataView;       
     }
     
@@ -93,7 +94,8 @@ class MY_Controller extends CI_Controller {
                 }                
             }   
         }
-
+        //$this->load->get_var($key)
+        $this->load->vars($this->dataView);
         return $this->dataView;
     }    
 }
