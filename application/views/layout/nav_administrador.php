@@ -19,13 +19,13 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Objetivos <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li class="dropdown-header">Lista de Objetivos</li> 
-                    <li><a href="#">objetivo 1</a></li>
+                    <li><a href="/scaffolding?table=ac_objetivos">nuevo objetivo</a></li>
                     <?php foreach ($user_objetivo as $key => $value): ?>
                     <li><div class="col-sm-12"><a href="/objetivo/index/<?php echo $value['id_objetivo'] ?>" alt="<?php echo $value['titulo'] ?>"><?php echo $value['titulo'] ?></a></div></li>
                     <?php endforeach; ?>                    
                   </ul>
                 </li>
-                <li><a href="/usuario/index">Usuarios</a></li>
+                <li><a href="/scaffolding?table=ac_usuarios">Usuarios</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                   <li><a href="#"><?php echo $user['nombre'] ." ". $user['apellido']; ?></a></li>  

@@ -35,10 +35,12 @@ class Layout
      * @param Array $data
      * @return Array
      */
-    private function _formatTitle(array $data)
+    private function _formatTitle($data)
     {
         if (isset($data['titulo'])) {
             $data['titulo'] = $data['titulo'] . ' | '. TITULO;
+        } else {
+            $data['titulo'] = 'default' . ' | '. TITULO; 
         }
         return $data;
     }

@@ -5,9 +5,6 @@
 <p>Page rendered in {elapsed_time}</p>
 </div>
 
-</body>
-</html>
-
 <?php
 
 /* End of file footer.php */

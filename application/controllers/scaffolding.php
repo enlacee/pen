@@ -25,7 +25,7 @@
  * @author		ExpressionEngine Dev Team
  * @link		http://codeigniter.com/user_guide/general/scaffolding.html
  */
-class Scaffolding extends CI_Controller {
+class Scaffolding extends MY_Controller {
 
 	var $CI;
 	var $current_table;
@@ -89,6 +89,8 @@ class Scaffolding extends CI_Controller {
 		
 				
 		log_message('debug', 'Scaffolding Class Initialized');
+                
+                $this->loadStatic(array('css'=>'scaffolding/stylesheet.css'));                
 	}
 	
 	function index()
@@ -116,9 +118,7 @@ class Scaffolding extends CI_Controller {
 						'table_url' => $this->table_url		
 					);
 
-		$this->load->view('scaffolding/header');
-		$this->load->view('scaffolding/add', $data);
-		$this->load->view('scaffolding/footer', $data);
+                $this->layout->view('scaffolding/add', $data);
 	}
 	
 	// --------------------------------------------------------------------
@@ -158,8 +158,8 @@ class Scaffolding extends CI_Controller {
 		$total_rows = $this->db->count_all($this->current_table);
 		
 		if ($total_rows < 1)
-		{
-			return $this->load->view('scaffolding/no_data');
+		{	
+                        return $this->layout->view('scaffolding/no_data');
 		}
 		
 		// Set the query limit/offset
@@ -195,11 +195,9 @@ class Scaffolding extends CI_Controller {
 						'primary'	=> $primary,
 						'paginate'	=> $this->pagination->create_links(),
 						'table_url' => $this->table_url		
-					);
-						
-		$this->load->view('scaffolding/header');
-		$this->load->view('scaffolding/view', $data);
-		$this->load->view('scaffolding/footer', $data);
+					);						
+
+		$this->layout->view('scaffolding/view', $data);
 	}
 	
 	// --------------------------------------------------------------------
@@ -232,10 +230,8 @@ class Scaffolding extends CI_Controller {
 						'query'		=> $query->row(),						
 						'table_url' => $this->table_url		
 					);
-
-		$this->load->view('scaffolding/header');
-		$this->load->view('scaffolding/edit', $data);
-		$this->load->view('scaffolding/footer', $data);
+                
+                $this->layout->view('scaffolding/edit', $data);
 	}
 	
 	// --------------------------------------------------------------------
@@ -274,11 +270,9 @@ class Scaffolding extends CI_Controller {
 						'no'		=> anchor('scaffolding'.$this->table_url, $this->lang->line('scaff_no')),
 						'yes'		=> anchor('scaffolding/do_delete/'. $this->uri->segment(3).$this->table_url, $this->lang->line('scaff_yes')),
 						'table_url' => $this->table_url		
-					);
-	
-		$this->load->view('scaffolding/header');
-		$this->load->view('scaffolding/delete', $data);
-		$this->load->view('scaffolding/footer', $data);
+					);	
+                
+                $this->layout->view('scaffolding/delete', $data);
 	}
 	
 	// --------------------------------------------------------------------

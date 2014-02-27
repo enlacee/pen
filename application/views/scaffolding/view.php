@@ -1,3 +1,5 @@
+<?php  $this->load->view('scaffolding/header');  ?>
+
 <table border="0" cellpadding="0" cellspacing="1" style="width:100%">
  <tr>
 	<?php foreach($fields as $field): ?>
@@ -18,7 +20,8 @@
 <?php endforeach; ?>
 </table>
 
-<?php echo $paginate; 
+<?php echo $paginate; ?>
 
+<?php $this->load->view('scaffolding/footer');
 /* End of file view.php */
 /* Location: ./application/views/scaffolding/view.php */
