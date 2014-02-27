@@ -18,6 +18,7 @@ class Layout
     
     function view($view, $data=null, $return=false)
     {   
+        $loadedData = array();
         $loadedData = array_merge($loadedData, (array) $this->CI->session->all_userdata());
         $data = $this->_formatTitle($data);
         $loadedData['content_for_layout'] = $this->CI->load->view($view, $data, true);   
