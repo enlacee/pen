@@ -90,16 +90,55 @@ class Cuadro_model  extends CI_Model {
             unset($data[$id_variable]);
             $this->db->update($this->_name ,$data);
         }        
+    }
+    /**
+     * 
+     * @param String $dataGrid cadena SQL
+     * @param Boolean $num_rows obtenero numero de filas
+     * @return mix string or Array.
+     */
+    public function jqListar(array $dataGrid, $num_rows = false)
+    {
+        $rs = false; 
+        // inicio filtro.pdre
+        $this->db->where('id_objetivo', $dataGrid['id_objetivo']);   
+        
+        if ($num_rows === true) {
+            if (!empty($dataGrid['string'])) {
+                $this->db->where($dataGrid['string']);   
+            }            
+            
+        } else {
+            
+            if (!empty($dataGrid['string'])) {
+               $this->db->where($dataGrid['string']);               
+            } else {                
+                if (isset($dataGrid['oderby'])) {
+                    $sidx = $dataGrid['oderby']['sidx'];
+                    $sord = $dataGrid['oderby']['sord'];                
+                    $this->db->order_by($sidx, $sord); 
+                }            
+                if (isset($dataGrid['limit'])) {
+                    if ($dataGrid['limit'] && $dataGrid['start']) {
+                        $this->db->limit($dataGrid['limit'], $dataGrid['start']);
+                    }else {
+                        $this->db->limit($dataGrid['limit']);
+                    }
+                }   
+            }
+        }
+        
+        $this->db->select('id_cuadro, id_objetivo, creado_por, titulo, fecha_registro');        
+        $query = $this->db->get($this->_name); 
+        //log_message('error', print_r($this->db->last_query(),true));        
+        if ($num_rows === true) {            
+            $rs = $query->num_rows();
+        } else {
+            $rs = $query->result_array();
+        }
+        
+        return $rs;
     }    
     
-    /**
-     * Registrar Cuadro Estadistico + variables
-     * tabla de mucho a muchos
-     */
-    /*private function _registrarCuadroVariable($dataCuadroVariable)
-    {
-        
-        
-    } 
-    */
+
 }

@@ -115,7 +115,7 @@ class Variable_model  extends CI_Model {
         
         $this->db->select('id_variable, nombre, tipo_variable, fecha_registro');        
         $query = $this->db->get($this->_name); 
-        log_message('error', print_r($this->db->last_query(),true));        
+        //log_message('error', print_r($this->db->last_query(),true));        
         if ($num_rows === true) {
             //$rs = $query->num_fields();
             $rs = $query->num_rows();

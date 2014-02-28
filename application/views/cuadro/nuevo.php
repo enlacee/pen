@@ -1,10 +1,9 @@
-<h3>Crear Cuadro</h3>
-
 <?php if (validation_errors()):?>
 <div class="alert alert-danger">
 <?php echo validation_errors();?>
 </div>
 <?php endif;?>
+<h3>Crear Cuadro</h3>
 <?php 
 $atributes = array (
     'method' => 'post',

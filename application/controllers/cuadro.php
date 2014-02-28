@@ -65,5 +65,68 @@ class Cuadro extends MY_Controller {
         //02
         $cuadro['variableData'] = $this->input->post('variableData');
         return $this->Cuadro_model->insertar($cuadro);
+    }
+    
+    /**
+     * Listar Cuadros estadisticos por Objetivo
+     */
+    public function jqlistar()
+    {   
+        $this->load->model('Cuadro_model');
+        $responce = new stdClass();
+        
+        $id_objetivo = $this->input->get('id_objetivo');
+        $page = $this->input->get('page');
+        $limit = $this->input->get('rows');
+        $sidx = $this->input->get('sidx');
+        $sord = $this->input->get('sord');
+        if (!$sidx) $sidx = 1;        
+        
+        $dataGrid['id_objetivo'] = $id_objetivo;
+        if (isset($_GET['searchField']) && ($_GET['searchString'] != null)) {
+            $operadores["eq"] = "=";
+            $operadores["ne"] = "<>";
+            $operadores["lt"] = "<";
+            $operadores["le"] = "<=";
+            $operadores["gt"] = ">";
+            $operadores["ge"] = ">=";
+            $operadores["cn"] = "LIKE";
+            if ($_GET['searchOper'] == "cn") {
+                $dataGrid['string'] = $_GET['searchField'] . " " . $operadores[$_GET['searchOper']] . " '%" . $_GET['searchString'] . "%' ";
+            } else {
+                $dataGrid['string'] = $_GET['searchField'] . " " . $operadores[$_GET['searchOper']] . "'" . $_GET['searchString'] . "'";
+            }                
+        }        
+        $count = $this->Cuadro_model->jqListar($dataGrid, true);
+        
+        if ($count > 0) {
+            $total_pages = ceil($count/$limit);
+        } else {
+           $total_pages = 0; 
+        }
+        if ($page > $total_pages) $page = $total_pages;
+        $start = $limit * $page - $limit;         
+
+        $responce->page = $page;
+        $responce->total = $total_pages;
+        $responce->records = $count;
+        
+        $dataGrid['oderby'] = array('sidx' => $sidx, 'sord' => $sord);
+        $dataGrid['limit'] = $limit;
+        $dataGrid['start'] = $start;
+       
+        $result = $this->Cuadro_model->jqListar($dataGrid);
+        $i = 0;
+        while (list($clave, $row) = each($result)) {
+            $responce->rows[$i]['id'] = $row['id_cuadro'];
+            $responce->rows[$i]['cell'] = array(
+                $row['id_cuadro'],
+                $row['titulo'],
+                $row['fecha_registro']);
+            $i++;        
+        }
+        
+        $this->output->set_content_type('application/json');
+        $this->output->set_output(json_encode($responce));
     }    
 }
