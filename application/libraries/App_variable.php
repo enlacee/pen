@@ -129,6 +129,7 @@ class App_variable {
                 $string = $this->limpiarCadenaLista($string);
             } 
             $string = preg_split('#,#', $string);
+            if (empty($string[count($string)-1])) {unset($string[count($string)-1]);}
         } else {
             $string = false;
         }
@@ -146,7 +147,7 @@ class App_variable {
         $new = array();
         if (is_array($array)) {
             foreach ($array as $key => $value) {
-                $new[] = array('value' => $value);
+                $new[] = array('value' => trim($value));
             }
             return $new;
         }
