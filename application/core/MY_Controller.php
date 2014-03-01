@@ -11,7 +11,8 @@ class MY_Controller extends CI_Controller {
     
     public $auth;
     public $dataView = array();
-    public $idUsuario = false;
+    public $idUsuario = null;
+    public $esSuper = null;
     private $flagGrid = false;
 
     public function __construct()
@@ -48,6 +49,7 @@ class MY_Controller extends CI_Controller {
         $userSession = $this->session->userdata('user');        
         if (is_array($userSession) && count($userSession) > 0) {
             $this->idUsuario = $userSession['id_usuario'];
+            $this->esSuper = $userSession['es_super_usuario'];
             $this->auth = true;
         } else {
             $this->auth = false;

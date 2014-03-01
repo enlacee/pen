@@ -1,5 +1,6 @@
-    <!-- JQGRID -->
-    <table id="list47"></table>
-    <div id="plist47"></div>
-    
-idObjetivo = <?php echo $idObjetivo ?>
+Objetivo <?php echo $idObjetivo ?>
+<input type="hidden" name="id_objetivo" id="id_objetivo" value="<?php echo $idObjetivo ?>"/> : Cuadros
+
+<!-- JQGRID -->
+<table id="list"></table>
+<div id="pager"></div>  
