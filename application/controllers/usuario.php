@@ -32,7 +32,7 @@ class Usuario extends MY_Controller {
         );
         $this->loadJqgrid();
         //$this->loadStatic(array("js"=>"js/module/usuario/cuadro.js"));
-        $this->layout->view('usuario/objetivo',$data);        
+        $this->layout->view('usuario/cuadro',$data);        
         
     }
     
@@ -55,13 +55,17 @@ class Usuario extends MY_Controller {
        
         $result = $this->Usuario_model->jqListar($dataGrid);
         
+        
+        
         $i = 0;
-        while (list($clave, $row) = each($result)) {
+        while (list($clave, $row) = each($result)) { //ico ui-icon ui-icon-pencil
+            $link = '<a class="link" href="/usuario/cuadro/'.$row['id_cuadro'].'">ver</a>';
             $responce->rows[$i]['id'] = $row['id_cuadro'];
             $responce->rows[$i]['cell'] = array(
                 $row['id_cuadro'],
                 $row['titulo'],
-                $row['fecha_registro']);
+                $row['fecha_registro'],
+                $link);
             $i++;        
         }
         

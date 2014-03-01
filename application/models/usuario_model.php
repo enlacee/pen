@@ -59,7 +59,7 @@ class Usuario_model  extends CI_Model {
         
         $keyCache ="listaCuadros_" . $id_objetivo . "_" . $id_usuario;
         
-        if ( ($rs = $this->cache->file->get($keyCache)) == false ) {
+        if (($rs = $this->cache->file->get($keyCache)) == false ) {
             // 01 lista de cuadros por id_objetivo
             $cuadros = $this->_listarCuadros($id_objetivo);        
 
@@ -73,9 +73,15 @@ class Usuario_model  extends CI_Model {
                 if ($id_usuario != $value['id_usuario']) {
                     $usuarioCuadro[] = $this->_listarUsuariosConCuadro($id_objetivo, $value['id_usuario']);
                 }
-            }           
+            }
             $idCuadroPropietario = $this->_getIdCuadros($usuarioCuadro);
-
+            
+            // 04 lista de cuadros a no eliminar
+            $usuarioCuadroAsignado = array();
+            $usuarioCuadroAsignado[] = $this->_listarUsuariosConCuadro($id_objetivo, $id_usuario, true);
+            $idCuadroPropietarioAsignado = $this->_getIdCuadros($usuarioCuadroAsignado);
+            
+            $idCuadroPropietario = array_diff($idCuadroPropietario, $idCuadroPropietarioAsignado);
             $rs = $this->_eliminarCuadros($cuadros, $idCuadroPropietario);
             $this->cache->file->save($keyCache, $rs, 600);            
         }
@@ -110,16 +116,23 @@ class Usuario_model  extends CI_Model {
         ->result_array();        
     }
 
-    /**
-     * Listar cuadros ayuda
-     * @return type
-     */
-    private function _listarUsuariosConCuadro($id_objetivo, $id_usuario)
+/**
+ * 
+ * @param type $id_objetivo 
+ * @param type $id_usuario
+ * @param type $usuarioAsignado Estado para filtrar datos.
+ * @return type Array
+ */
+    private function _listarUsuariosConCuadro($id_objetivo, $id_usuario, $usuarioAsignado = false)
     {
         $this->db->select('ac_cuadros.id_cuadro')->from('ac_cuadros');
         $this->db->join('ac_cuadros_usuarios', 'ac_cuadros.id_cuadro = ac_cuadros_usuarios.id_cuadro');
         $this->db->where('ac_cuadros.id_objetivo', $id_objetivo);
-        $this->db->where('ac_cuadros_usuarios.id_usuario', $id_usuario);
+        if ($usuarioAsignado == true) { 
+           $this->db->where('ac_cuadros_usuarios.usuario_asignado', $id_usuario); 
+        } else {
+            $this->db->where('ac_cuadros_usuarios.id_usuario', $id_usuario);
+        }
         $this->db->group_by('ac_cuadros.id_cuadro');
         $query = $this->db->get();
         return $query->result_array();
@@ -134,7 +147,7 @@ class Usuario_model  extends CI_Model {
     {
         $colecionIdCuadro = array();
         $i = 0;
-        foreach ($arrayDesordenado as $arreglo => $value) {            
+        foreach ($arrayDesordenado as $arreglo => $value) {
             foreach ($value as $llave => $valor) {
                 $colecionIdCuadro[$i] = $valor['id_cuadro'];
                 $i++;

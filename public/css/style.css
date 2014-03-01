@@ -6,3 +6,11 @@ body {
 .navbar {
   margin-bottom: 20px;
 }
+
+.link {
+    display: block;
+    /*border: 1px dotted red;
+    margin: 0 5px;*/
+    text-decoration: underline;
+    
+}
