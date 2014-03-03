@@ -6,7 +6,7 @@ var $id = $('#id_objetivo').val();
 jQuery("#list").jqGrid({
    	url:'/cuadro/jqlistar?id_objetivo=' + $id,
 	datatype: "json",
-   	colNames:['id_cuadro','Titulo', 'Fecha registro'],
+   	colNames:['id','Titulo', 'Fecha registro'],
    	colModel:[
    		{name:'id_cuadro',index:'id_cuadro', width:55},
    		{name:'titulo',index:'titulo', width:400, editable:true},   		

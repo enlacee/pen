@@ -179,4 +179,18 @@ class Adm_variable extends MY_Controller {
         $this->output->set_content_type('application/json');
         $this->output->set_output(json_encode($responce));
     }
+    
+    /**
+     * Edicion de datos
+     */
+    public function jqeditar()
+    {    
+        if($this->input->post()) {            
+            if(!empty($this->input->post('id'))) {
+                $dataUpdate = array('nombre' => $this->input->post('nombre'));
+                $where = "id_variable = ".$this->input->post('id');
+                $this->db->update( 'ac_variables', $dataUpdate, $where);
+            }
+        }
+    }    
 }

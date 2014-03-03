@@ -40,7 +40,7 @@ echo form_open("", $atributes); ?>
     <div class="col-md-7">
         <div class="col-sm-5"></div>
         <div class="col-sm-7">
-            <button type="button" class="btn btn-primary input-sm">Cancelar</button>
+            <a href="/objetivo/index/<?php echo $id_objetivo ?>" class="btn btn-primary input-sm">Cancelar</a>
             <button type="submit" class="btn btn-primary input-sm">Guardar</button>
         </div>
     </div>
