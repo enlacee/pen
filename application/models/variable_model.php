@@ -125,4 +125,20 @@ class Variable_model  extends CI_Model {
         
         return $rs;
     }
+    
+    /**
+     * 
+     * @param type $id
+     * @return type
+     */
+    public function relacionConCuadros($id)
+    {        
+        $this->db->select("ac_variables.id_variable")->from($this->_name);
+        $this->db->join('ac_cuadros_variables', "ac_variables.id_variable = ac_cuadros_variables.id_variable");
+        $this->db->where("ac_variables.id_variable = $id");
+        $this->db->limit(1);
+        $query = $this->db->get();        
+        return $query->num_rows();        
+    }    
+    
 }

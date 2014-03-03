@@ -21,7 +21,28 @@ jQuery("#list").jqGrid({
     editurl:'/adm_variable/jqeditar'
     /*caption:"JSON Example"*/
 });
-jQuery("#list").jqGrid('navGrid','#pager',{edit:true,add:false,del:false});
+//jQuery("#list").jqGrid('navGrid','#pager',{edit:true,add:false,del:false});
+//add delete
+$("#list").navGrid('#pager',
+        {edit:true,add:false,del:true,search:false},{}, {},
+        {width:500, url:'/adm_variable/jqeditar',
+            reloadAfterSubmit:true,
+             onclickSubmit: function(param) {
+                var sr = jQuery('#list').getGridParam('selrow');
+                return {idUser:sr};
+            },
+            afterSubmit: function(reponse, data) {
+                var json = reponse.responseJSON; console.log('json',json);
+                if(json == true) {
+                    //$("#list").trigger('reloadGrid');
+                    return ['true',""];
+                } else {
+                    alert("No se puede eliminar, La variable esta siendo usada por uno o varios cuadros.");
+                    return ['False',''];
+                }
+                
+            }
+        });
 
 //$("#list47").jqGrid('setGridWidth', 250);
 fixGridSize($("#list"));

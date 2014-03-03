@@ -18,7 +18,7 @@ class Adm_variable extends MY_Controller {
     public function index()
     {
         $this->load->library('layout');        
-        $data['titulo'] = "Variables";        
+        $data['titulo'] = "Variables";    
         $data['mensajeBox'] = $this->session->flashdata('mensajeBox');
         $this->loadJqgrid();        
         $this->loadStatic(array("js"=>"js/module/adm-variable/index.js"));
@@ -185,11 +185,31 @@ class Adm_variable extends MY_Controller {
      */
     public function jqeditar()
     {    
+        $this->load->model('Variable_model');
+        $this->load->dbforge();        
+        
         if($this->input->post()) {            
-            if(!empty($this->input->post('id'))) {
-                $dataUpdate = array('nombre' => $this->input->post('nombre'));
-                $where = "id_variable = ".$this->input->post('id');
-                $this->db->update( 'ac_variables', $dataUpdate, $where);
+            $id = $this->input->post('id');            
+            if(empty($id)) {echo "return"; return; }
+            
+            $where = "id_variable = " . $id;            
+            if ($this->input->post('oper') == 'edit') {
+                $dataUpdate = array('nombre' => $this->input->post('nombre'));                
+                $this->db->update( 'ac_variables', $dataUpdate, $where);              
+                
+            } else if ($this->input->post('oper') == 'del') { 
+                
+                $numRelacion = $this->Variable_model->relacionConCuadros($id);                
+                if($numRelacion == 0) { // NO HAY RELACION                    
+                    $this->db->delete( 'ac_variables', $where);
+                    $this->dbforge->drop_table('tabla_lista_'.$id);                    
+                    $responce = true;
+                } else {                   
+                   $responce = false; 
+                }
+                $this->output->set_content_type('application/json');
+                $this->output->set_output(json_encode($responce));
+                
             }
         }
     }    

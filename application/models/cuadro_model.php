@@ -151,6 +151,7 @@ class Cuadro_model  extends CI_Model {
         $this->db->select('ac_cuadros.id_cuadro')->from($this->_name);
         $this->db->join('ac_cuadros_usuarios', "ac_cuadros.id_cuadro = ac_cuadros_usuarios.id_cuadro");
         $this->db->where("ac_cuadros.id_cuadro = $id");
+        $this->db->limit(1);
         $query = $this->db->get();        
         return $query->num_rows();        
     }
