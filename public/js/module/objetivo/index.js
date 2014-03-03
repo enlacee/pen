@@ -32,14 +32,16 @@ $("#list").navGrid('#pager',
                 return {idUser:sr};
             },
             afterSubmit: function(reponse, data) {
-                if(reponse == 0) {
-                    alert("error no se puede eliminar");
+                var json = reponse.responseJSON; console.log('json',json);
+                if(json == true) {
+                    //$("#list").trigger('reloadGrid');
+                    return ['true',""];
+                } else {
+                    alert("No se puede eliminar, EL cuadro ya fue asignado a un usuario.");
+                    return ['False',''];
                 }
-                $("#list").trigger('reloadGrid');
-                //$("#eData").click(); // clic sur "Annuler"
-                return [true,"Supression réussie"];
+                
             }
         });
-// 
 //$("#list47").jqGrid('setGridWidth', 250);
 fixGridSize($("#list"));
