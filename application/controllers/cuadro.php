@@ -140,28 +140,23 @@ class Cuadro extends MY_Controller {
         $this->load->dbforge();        
         
         if($this->input->post()) {
-            $id = $this->input->post('id');
-            
+            $id = $this->input->post('id');            
             if(empty($id)) {echo "return"; return; }
             
-            $where = "id_cuadro = " . $id;
-            
+            $where = "id_cuadro = " . $id;            
             if ($this->input->post('oper') == 'edit') {
                 $dataUpdate = array('titulo' => $this->input->post('titulo'));                
                 $this->db->update( 'ac_cuadros', $dataUpdate, $where);                
                 
-            } else if ($this->input->post('oper') == 'del') {                
-                
-                $numRelacion = $this->Cuadro_model->relacionConUsuarios($id);
-                
+            } else if ($this->input->post('oper') == 'del') {
+                $numRelacion = $this->Cuadro_model->relacionConUsuarios($id);                
                 if($numRelacion == 0) {                    
                     $this->db->delete( 'ac_cuadros', $where);
                     $this->dbforge->drop_table('tabla_cuadro_'.$id);                    
                     $responce = true;
                 } else {                   
                    $responce = false; 
-                }                
-                
+                }
                 $this->output->set_content_type('application/json');
                 $this->output->set_output(json_encode($responce));
             }
