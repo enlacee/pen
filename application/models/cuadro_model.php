@@ -138,7 +138,22 @@ class Cuadro_model  extends CI_Model {
         }
         
         return $rs;
-    }    
+    }
+    
+    /**
+     * Existe cuadro relacionado con algun usuario.
+     * @param type $id
+     * @param type $id_usuario
+     * @return Integer existe relacion
+     */
+    public function relacionConUsuarios($id)
+    {
+        $this->db->select('ac_cuadros.id_cuadro')->from($this->_name);
+        $this->db->join('ac_cuadros_usuarios', "ac_cuadros.id_cuadro = ac_cuadros_usuarios.id_cuadro");
+        $this->db->where("ac_cuadros.id_cuadro = $id");
+        $query = $this->db->get();        
+        return $query->num_rows();        
+    }
     
 
 }
