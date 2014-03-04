@@ -24,24 +24,6 @@ class Usuario extends MY_Controller {
 
     }
     
-    public function cuadro($indice)
-    {   
-        $this->load->model('Variable_model');
-        $this->load->model('Cuadro_data_model');
-        $this->load->driver('cache');
-        $this->loadJqgrid();
-        
-        $objCuadro = new Cuadro_data_model($indice);    
-        $data = array(
-            'titulo' => 'Cuadro Usuario',
-            'idCuadro' => $indice,
-            'objCuadro' => $objCuadro
-        );
-        
-        //$this->loadStatic(array("js"=>"js/module/usuario/cuadro.js"));
-        $this->layout->view('usuario/cuadro',$data);        
-    }
-    
     /**
      * Listar Cuadros estadisticos por Objetivo
      * Y codicion
@@ -63,7 +45,7 @@ class Usuario extends MY_Controller {
         
         $i = 0;
         while (list($clave, $row) = each($result)) { //ico ui-icon ui-icon-pencil
-            $link = '<a class="link" href="/usuario/cuadro/'.$row['id_cuadro'].'">ver</a>';
+            $link = '<a class="link" href="/tabla_cuadro/index/'.$row['id_cuadro'].'">ver</a>';
             $responce->rows[$i]['id'] = $row['id_cuadro'];
             $responce->rows[$i]['cell'] = array(
                 $row['id_cuadro'],
