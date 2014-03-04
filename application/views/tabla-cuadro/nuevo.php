@@ -21,7 +21,7 @@ echo form_open("/tabla_cuadro/nuevo/" . $idCuadro, $atributes); ?>
     <div class="col-md-7">
         <div class="col-sm-5"></div>
         <div class="col-sm-7">
-            <a href="<?php echo $_SERVER['HTTP_REFERER'] ?>" class="btn btn-primary input-sm">Cancelar</a>
+            <a href="/tabla_cuadro/index/<?php echo $idCuadro ?>" class="btn btn-primary input-sm">Cancelar</a>
             <button type="submit" class="btn btn-primary input-sm">Guardar</button>
         </div>
     </div>

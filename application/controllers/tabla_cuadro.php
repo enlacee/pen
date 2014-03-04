@@ -15,6 +15,7 @@ class Tabla_cuadro  extends MY_Controller {
     {
         $data = array(
             'titulo' => 'tabla cuadro',
+            'mensajeBox' => $this->session->flashdata('mensajeBox'),
             'idCuadro' => $idCuadro
         );
         $this->loadJqgrid();
@@ -28,50 +29,44 @@ class Tabla_cuadro  extends MY_Controller {
         $this->load->model('Cuadro_data_model');
         $this->load->driver('cache');
         $this->load->helper('form');        
-        $this->load->library('form_validation');        
-        $this->loadJqgrid();
+        $this->load->library('form_validation');
         
         $objCuadro = new Cuadro_data_model($idCuadro);    
         $data = array(
             'titulo' => 'Cuadro Usuario',
+            'mensajeBox' => $this->session->flashdata('mensajeBox'),
             'idCuadro' => $idCuadro,
             'objCuadro' => $objCuadro
-        );       
-        
-        
-        echo "<pre>"; print_r($this->input->post()); echo "</pre>";
-          
-        if($this->input->post()) {                
-            $id_cuadro = (int) $this->input->post('id_cuadro');
-            //echo "entro";            var_dump($id_cuadro);
+        );           
+
+        $dataPost = $this->input->post();
+        if ($dataPost) {                
+            $id_cuadro = (int) $this->input->post('id_cuadro');            
             if ($id_cuadro > 0) {
                 $this->_validarForm($objCuadro);
                 if ($this->form_validation->run() == false) {
-                    // error en alguna validacion
-                    //redirect($_SERVER['HTTP_REFERER']);
-                    //exit;       
-                } else {   
-                    echo "todo ok en form";
+                    // error en alguna validacion       
+                } else {
+                    unset($dataPost['id_cuadro']);
+                    $this->db->insert($objCuadro->getNombreTabla(), $dataPost);
+                    $this->session->set_flashdata('mensajeBox', 'Se registro corectamente  en el cuadro: <strong>' . $idCuadro . '</strong>');
+                    redirect("tabla_cuadro/index/$idCuadro");                     
                     exit;
-                    //$this->_registrarCuadro();
-                    //redirect("objetivo/index/".$this->input->post('id_objetivo'));
                 }
-
-
             }
-
-        }          
+        }  
         
-        //$this->loadStatic(array("js"=>"js/module/usuario/cuadro.js"));
         $this->layout->view('tabla-cuadro/nuevo', $data);
     }
     
     /*
      * Validar formulario de acuerdo al objeto cuadro.
+     * - lista : diferente de cero
+     * - cadena+otros : campo requerido
+     * falta implementar otras validaciones en BACK.
      */    
     private function _validarForm($objCuadro)
     {   
-        
         foreach ($objCuadro as $indice => $arreglo) {
             foreach ($arreglo as $key => $obj){
                 if ($obj->tipo_variable == Variable_model::TIPO_LISTA_STRING) {
@@ -80,16 +75,7 @@ class Tabla_cuadro  extends MY_Controller {
                    $this->form_validation->set_rules($obj->nombre_key,$obj->nombre,'trim|required'); 
                 }       
             }       
-        }
-
-        
-        
-        
-        
-        //$this->form_validation->set_rules('variable_6','sexo','required|callback_value_check');
-        //$this->form_validation->set_rules('value', 'Valor','trim|required|callback_value_check');
-        //$this->form_validation->set_rules('variableData','Variables','required');
-        
+        }        
     }
 
     /** ------------------------------------------------------------------------
