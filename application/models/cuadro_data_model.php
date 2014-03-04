@@ -7,7 +7,7 @@
  */
 class Cuadro_data_model extends CI_Model {
     
-    private $cuadro = null;
+    public $cuadro = null;
     private $numVariables = null;
 
     public function __construct($id = null) {
@@ -17,7 +17,8 @@ class Cuadro_data_model extends CI_Model {
             $this->cuadro = $this->_listarDataCuadro($id);            
             $this->numVariables = count($this->cuadro);
             $this->_vincularDatos();
-        }        
+        }
+        return $this->cuadro;
     }
     
     public function getNumVariables()
@@ -45,15 +46,38 @@ class Cuadro_data_model extends CI_Model {
      */
     private function _listarSegunTipo($ac_tabla_lista_id)
     {   
-        $keyCache = __CLASS__ . __FUNCTION__ .'_'. $ac_tabla_lista_id;
-        
-        if (($rs = $this->cache->file->get($keyCache)) == false ) {
-            $tabla = $this->db->dbprefix($ac_tabla_lista_id); 
-            $rs = $this->db->select()->from($tabla)->get()->result_array();
-            $this->cache->file->save($keyCache, $rs, 600); 
+        $rs = null;
+        if (!empty($ac_tabla_lista_id)) {
+            $keyCache = __CLASS__ . __FUNCTION__ .'_'. $ac_tabla_lista_id;
+
+            if (($rs = $this->cache->file->get($keyCache)) == false ) {
+                $tabla = $this->db->dbprefix($ac_tabla_lista_id); 
+                $rs = $this->db->select()->from($tabla)->get()->result_array();
+                $rs = $this->_formatearArraySimple($rs);
+                $this->cache->file->save($keyCache, $rs, 600); 
+            }
         }
         return $rs;
     }
+    
+    /*
+     * Formato de array db a array simple
+     * array
+        (
+            [0] => Array([id] => 1 [value] => M)
+            [1] => Array([id] => 2 [value] => F)
+        )
+     */
+    private function _formatearArraySimple($data)
+    {
+        $new = array();
+        if (count($data) > 0) {
+            foreach ($data as $key => $value) {
+                $new[$value['id']] = $value['value'];            
+            }
+        }
+        return $new;
+    }    
     
     /*
      * lista de datos x cache

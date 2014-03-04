@@ -11,7 +11,7 @@ $atributes = array (
 echo form_open("", $atributes); ?>
     <input type="hidden" name="id_objetivo" value="<?php echo $id_objetivo ?>"/>
     
-<div class="row">    
+<div class="row form-group">    
     <div class="col-md-7">
         <div class="col-sm-3"><label>Titulo :</label></div>
         <div class="col-sm-6"><input  type="text" name="titulo" class="form-control input-sm" value="<?php echo set_value('titulo'); ?>"></div>
@@ -19,7 +19,7 @@ echo form_open("", $atributes); ?>
     </div>    
 </div>
     
-<div class="row">    
+<div class="row form-group">    
     <div class="col-md-7">
         <div class="col-sm-3"><label>Agregar variable :</label></div>
         <div class="col-sm-7"><input type="text" name="variable" id="variable" class="form-control input-sm" placeholder="Search"></div>
@@ -27,16 +27,17 @@ echo form_open("", $atributes); ?>
     </div>    
 </div>
     
-<div class="row">
+<div class="row form-group">
     <div class="col-md-7">
         <div class="col-sm-3"></div>
         <div class="col-sm-7">
             Lista de variables:<br/>
             <div id="lista-variables"></div>
     </div>
+    </div>
 </div>
     
-<div class="row">
+<div class="row form-group">
     <div class="col-md-7">
         <div class="col-sm-5"></div>
         <div class="col-sm-7">
