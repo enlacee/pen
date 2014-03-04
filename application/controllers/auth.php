@@ -37,9 +37,14 @@ class Auth  extends MY_Controller {
         return $flag;
     }
     
+    /**
+     * Cerrar session y limpiar datos en cache.
+     */
     public function salir()
     {   
+        $this->load->driver('cache');    
         $this->session->sess_destroy();
+        $this->cache->file->clean();
         redirect('/index');
     }
 }

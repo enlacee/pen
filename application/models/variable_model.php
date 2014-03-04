@@ -8,6 +8,11 @@ class Variable_model  extends CI_Model {
     const TIPO_BINARIO = 3;
     const TIPO_CADENA = 4;
     const TIPO_LISTA = 5;
+    const TIPO_ENTERO_STRING = 'ENTERO';
+    const TIPO_REAL_STRING = 'REAL';
+    const TIPO_BINARIO_STRING = 'BINARIO';
+    const TIPO_CADENA_STRING = 'CADENA';
+    const TIPO_LISTA_STRING = 'LISTA';       
     
     public function __construct()
     {

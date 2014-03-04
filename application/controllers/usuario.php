@@ -25,15 +25,21 @@ class Usuario extends MY_Controller {
     }
     
     public function cuadro($indice)
-    {
-        $data = array(
-            'titulo' => 'Cuadro',
-            'idCuadro' => $indice
-        );
+    {   
+        $this->load->model('Variable_model');
+        $this->load->model('Cuadro_data_model');
+        $this->load->driver('cache');
         $this->loadJqgrid();
+        
+        $objCuadro = new Cuadro_data_model($indice);    
+        $data = array(
+            'titulo' => 'Cuadro Usuario',
+            'idCuadro' => $indice,
+            'objCuadro' => $objCuadro
+        );
+        
         //$this->loadStatic(array("js"=>"js/module/usuario/cuadro.js"));
         $this->layout->view('usuario/cuadro',$data);        
-        
     }
     
     /**
@@ -54,8 +60,6 @@ class Usuario extends MY_Controller {
         $dataGrid['id_usuario'] = $this->idUsuario;
        
         $result = $this->Usuario_model->jqListar($dataGrid);
-        
-        
         
         $i = 0;
         while (list($clave, $row) = each($result)) { //ico ui-icon ui-icon-pencil

@@ -2,4 +2,8 @@ Cuadro <?php echo $idCuadro ?><input type="hidden" name="id_cuadro" id="id_cuadr
 
 <!-- JQGRID -->
 <table id="list"></table>
-<div id="pager"></div>  
+<div id="pager"></div> 
+
+
+
+<?php echo "<pre>"; print_r($objCuadro)?>
