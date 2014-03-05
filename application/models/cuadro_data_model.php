@@ -87,7 +87,7 @@ class Cuadro_data_model extends CI_Model {
         $keyCache = __CLASS__ . __FUNCTION__ .'_'. $id;        
         
         if (($rs = $this->cache->file->get($keyCache)) == false ) {
-            $this->db->select('*,c.table_cuadro as tabla');
+            $this->db->select('*');
             $this->db->from('ac_cuadros as c');
             $this->db->join('ac_cuadros_variables as cv', 'c.id_cuadro = cv.id_cuadro');
             $this->db->join('ac_variables as v', 'cv.id_variable = v.id_variable');
@@ -107,10 +107,19 @@ class Cuadro_data_model extends CI_Model {
         $nombre = null;
         foreach ($this->cuadro as $indice => $obj) {            
             foreach ($obj as $key => $value) {
-                $nombre = $obj->tabla;
+                $nombre = $obj->table_cuadro;
                 break;
             }
         }
         return $this->db->dbprefix($nombre);        
     }
+    
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    
+    public function jqListar()
+    {
+        
+    }
+    
 }
