@@ -9,6 +9,7 @@ class Cuadro_data_model extends CI_Model {
     
     public $cuadro = null;
     private $numVariables = null;
+    private $nombre_tabla = null;
 
     public function __construct($id = null) {
         parent::__construct();
@@ -102,24 +103,67 @@ class Cuadro_data_model extends CI_Model {
      * obtener nombre de la tabla del cuadro estadistico 'generado'.
      */
     public function getNombreTabla()
-    {
-        $this->cuadro;
-        $nombre = null;
-        foreach ($this->cuadro as $indice => $obj) {            
-            foreach ($obj as $key => $value) {
+    {   
+        if ($this->nombre_tabla == null) {
+            $nombre = null;
+            foreach ($this->cuadro as $indice => $obj) {
                 $nombre = $obj->table_cuadro;
                 break;
             }
-        }
-        return $this->db->dbprefix($nombre);        
+            $this->nombre_tabla = $this->db->dbprefix($nombre);
+        }            
+
+        return $this->nombre_tabla;
     }
     
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
-    
+    /**
+     * function de generacion de data para el Cuadro Dinamico.
+select * from ac_tabla_cuadro_1
+inner join ac_tabla_lista_6 on ac_tabla_cuadro_1.variable_6 = ac_tabla_lista_6.id -- si es LISTA      
+     */
     public function jqListar()
-    {
+    {   
+        $this->cuadro;
+        $campos = array();
+        $tablaPadre = $this->getNombreTabla();
         
+        $select_1 = "$tablaPadre.id";
+        $campos[0] = array('id' => $select_1, 'alias' => 'id', 'title' => 'IDE');
+        //--  
+        
+        $this->db->select($select_1);        
+        $this->db->from($tablaPadre);
+        $c = 1;
+        foreach ($this->cuadro as $indice => $obj) {
+            if (Variable_model::TIPO_LISTA_STRING == $obj->tipo_variable) {
+                $tableLista = $this->db->dbprefix($obj->table_lista);
+                $stringJoin = $tablaPadre .".".$obj->nombre_key . " = " . "$tableLista.id";
+                $select_2 = "$tableLista.value AS ". $obj->nombre_key .'_'.Variable_model::TIPO_LISTA_STRING;
+                
+                $campos[$c] = array(
+                    'id' => "$tableLista.value",
+                    'alias' => $obj->nombre_key .'_'.Variable_model::TIPO_LISTA_STRING,
+                    'title' => $obj->nombre);                                
+                $this->db->join($tableLista, $stringJoin);
+                $this->db->select($select_2);
+               
+            } else {                
+                $select_3 = $tablaPadre .".".$obj->nombre_key;                
+                $campos[$c] = array(
+                    'id' => $select_3,
+                    'alias' => $obj->nombre_key,
+                    'title' => $obj->nombre);                
+                $this->db->select($select_3);  
+            }
+            $c++;
+        }
+        $rs = array (
+            'data' => $this->db->get()->result_array(),
+            'campos' => $campos);
+        
+        return $rs;
     }
     
 }

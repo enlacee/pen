@@ -13,13 +13,17 @@ class Tabla_cuadro  extends MY_Controller {
     
     public function index($idCuadro)
     {
+        $this->load->model('Variable_model');
+        $this->load->model('Cuadro_data_model');
+        $this->load->driver('cache');
+        
         $data = array(
             'titulo' => 'tabla cuadro',
             'mensajeBox' => $this->session->flashdata('mensajeBox'),
             'idCuadro' => $idCuadro
         );
         $this->loadJqgrid();
-        $this->loadStatic(array("js"=>"js/modules_grid/37array.js"));
+        $this->loadStatic(array("js"=>"js/module/tabla-cuadro/index.js"));
         $this->layout->view('tabla-cuadro/index',$data);        
     }
     
@@ -78,7 +82,7 @@ class Tabla_cuadro  extends MY_Controller {
         }        
     }
 
-    /** ------------------------------------------------------------------------
+    /**
      * Validacion de datos segun codeigniter
      * Solo admite numeros de con digitos del [1-9]
      * @param type $str
@@ -92,5 +96,76 @@ class Tabla_cuadro  extends MY_Controller {
         } else {
             return TRUE;
         }        
+    }
+    
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    
+    public function jqlistar()
+    {
+        $this->load->model('Variable_model');
+        $this->load->model('Cuadro_data_model');
+        $this->load->driver('cache');
+        $idCuadro = $this->input->get('id_cuadro');
+        if (preg_match('#^[1-9].*$#', $idCuadro)) {     
+            $responce = new stdClass();
+            $objCuadro = new Cuadro_data_model($idCuadro);            
+            $result = $objCuadro->jqListar();
+            
+            $i = 0;
+            while (list($clave, $row) = each($result['data'])) {
+                $responce->rows[$i]['id'] = $row['id'];
+                /*$responce->rows[$i]['cell'] = array(
+                    $row['id'],
+                    $row['titulo'],
+                    $row['fecha_registro'],
+                    $link);
+                */
+                $responce->rows[$i]['cell'] = $this->_ayudaJqlistar($row, $result['campos']); 
+                $i++;        
+            }
+
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($responce));
+        }
+    }
+    
+    /*
+     * array simple para los dos parametros con el mismo KEY
+     * NOTA: el orden de los 2 array tiene que ser la misma.
+     * el select modelo 'objCuadro->jqListar()' es quien crea.. 
+     */
+    private function _ayudaJqlistar($row, $columnas)
+    {
+        $arregloVacio = $this->_getIdColumnas($columnas, 'alias');
+        foreach ($arregloVacio as $key => $value) {
+            $arregloVacio[$key] = isset($row[$key]) ? $row[$key] : null;
+        }        
+        return $arregloVacio;
     }    
+    
+    /**
+     * Obtener la columna indicada segun sea conveniente
+     * Array
+        (
+            [id] => ac_tabla_lista_6.value
+            [alias] => variable_6_LISTA
+            [title] => Sexo
+        )
+     * @param array $columnas
+     * @return null
+     */
+    private function _getIdColumnas(array $columnas, $keyColumna = 'alias')
+    {
+        $envace = array();
+        foreach ($columnas as $key => $arreglo) {
+            foreach ($arreglo as $indice => $valor) {                
+                if ($indice == $keyColumna) {
+                    $envace[$valor] = null;
+                    break;
+                }   
+            }
+        }
+        return $envace;
+    }
 }
