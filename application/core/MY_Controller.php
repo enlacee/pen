@@ -76,7 +76,7 @@ class MY_Controller extends CI_Controller {
     }
     
     protected function loadStatic(array $data = array()) {
-        
+      
         foreach ($data as $key => $value) {
             if ($key === 'css') {
                 if (is_string($data[$key])) {
@@ -94,8 +94,12 @@ class MY_Controller extends CI_Controller {
                         $this->dataView['js'][] = $valor;
                     }                        
                 }                
+            } elseif ($key === 'jstring') {
+                if (is_string($data[$key])) {
+                    $this->dataView['jstring'][] = $value;
+                }
             }   
-        }
+        }          
         //$this->load->get_var($key)
         $this->load->vars($this->dataView);
         return $this->dataView;

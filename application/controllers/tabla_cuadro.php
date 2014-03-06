@@ -16,15 +16,30 @@ class Tabla_cuadro  extends MY_Controller {
         $this->load->model('Variable_model');
         $this->load->model('Cuadro_data_model');
         $this->load->driver('cache');
+        $this->load->library('app_jqgrid');        
         
+        $objCuadro = new Cuadro_data_model($idCuadro);            
+        $result = $objCuadro->jqListar();
+        $campos = $result['campos'];
+        
+        $dataObj = array(            
+            'idHead' => '#list',
+            'idPager' => '#pager',
+            'url' => '/some/url',
+            'colNames' => array_keys($this->_getIdColumnas($campos, 'title')),
+            'colModel' => array_keys($this->_getIdColumnas($campos, 'alias')),
+            'sortname' => 'id',
+            'sortorder' => 'asc'
+        );
         $data = array(
-            'titulo' => 'tabla cuadro',
+            'titulo' => 'tabla cuadro dinamico',
             'mensajeBox' => $this->session->flashdata('mensajeBox'),
             'idCuadro' => $idCuadro
         );
+        $objJqgrid = new App_jqgrid($dataObj);
         $this->loadJqgrid();
-        $this->loadStatic(array("js"=>"js/module/tabla-cuadro/index.js"));
-        $this->layout->view('tabla-cuadro/index',$data);        
+        $this->loadStatic(array("jstring" => $objJqgrid->getGrid_1()));
+        $this->layout->view('tabla-cuadro/index', $data);        
     }
     
     public function nuevo($idCuadro)
@@ -99,8 +114,7 @@ class Tabla_cuadro  extends MY_Controller {
     }
     
     //--------------------------------------------------------------------------
-    //--------------------------------------------------------------------------
-    
+    //--------------------------------- JQGRID ---------------------------------    
     public function jqlistar()
     {
         $this->load->model('Variable_model');
@@ -167,5 +181,39 @@ class Tabla_cuadro  extends MY_Controller {
             }
         }
         return $envace;
+    }
+    
+    //--------------------------------------------------------------------------
+    /**
+     * Only Delete
+     * @return type
+     */
+    public function jqeditar()
+    {
+        $this->load->model('Variable_model');
+        $this->load->model('Cuadro_data_model');
+        $this->load->driver('cache');        
+        
+        if($this->input->post()) {
+            $id = $this->input->post('id');            
+            if(empty($id)) {echo "return"; return; }
+            
+            $where = "id = $id";
+            $responce = false;
+            if ($this->input->post('oper') == 'edit') {
+               // $dataUpdate = array('titulo' => $this->input->post('titulo'));
+                
+            } else if ($this->input->post('oper') == 'del') {
+                $idCuadro = $this->input->get('id_cuadro');
+                
+                if (preg_match('#^[1-9].*$#', $idCuadro)) {                    
+                    $objCuadro = new Cuadro_data_model($idCuadro);
+                    $this->db->delete($objCuadro->getNombreTabla(), $where);
+                    $responce = true;
+                }
+                $this->output->set_content_type('application/json');
+                $this->output->set_output(json_encode($responce));
+            }
+        }
     }
 }

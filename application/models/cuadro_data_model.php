@@ -130,7 +130,7 @@ inner join ac_tabla_lista_6 on ac_tabla_cuadro_1.variable_6 = ac_tabla_lista_6.i
         $tablaPadre = $this->getNombreTabla();
         
         $select_1 = "$tablaPadre.id";
-        $campos[0] = array('id' => $select_1, 'alias' => 'id', 'title' => 'IDE');
+        $campos[0] = array('id' => $select_1, 'alias' => 'id', 'title' => 'ID');
         //--  
         
         $this->db->select($select_1);        
@@ -164,6 +164,5 @@ inner join ac_tabla_lista_6 on ac_tabla_cuadro_1.variable_6 = ac_tabla_lista_6.i
             'campos' => $campos);
         
         return $rs;
-    }
-    
+    }    
 }

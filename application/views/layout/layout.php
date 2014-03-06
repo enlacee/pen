@@ -44,7 +44,13 @@
     <script src="<?php echo base_url()?>public/dist/js/bootstrap.min.js"></script>
     <?php if (isset($js)): ?><?php foreach ($js as $key => $value): ?>
     <script src="<?php echo base_url()?>public/<?php echo $value; ?>"></script>
-    <?php endforeach;?><?php endif;?>    
+    <?php endforeach;?><?php endif;?>
+    
+    <?php if (isset($jstring)) :?>
+    <?php foreach ($jstring as $key => $value): ?>
+    <script type="text/javascript"><?php echo $value; ?></script>
+    <?php endforeach;?>        
+    <?php endif; ?>
   </body>
 </html>
 <?php else: ?>
