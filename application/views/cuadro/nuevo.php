@@ -22,7 +22,7 @@ echo form_open("", $atributes); ?>
 <div class="row form-group">    
     <div class="col-md-7">
         <div class="col-sm-3"><label>Agregar variable :</label></div>
-        <div class="col-sm-7"><input type="text" name="variable" id="variable" class="form-control input-sm" placeholder="Search"></div>
+        <div class="col-sm-7"><input type="text" name="variable" id="variable" class="form-control input-sm" autocomplete="off" placeholder="Search"></div>
         <div class="col-sm-2"><button type="button" name="add" id="add" class="btn btn-default input-sm">OK</button></div>
     </div>    
 </div>

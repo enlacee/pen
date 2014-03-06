@@ -24,8 +24,8 @@ $(function () {
     });
     
     $('#add').click(function() { 
-        //var patron = /^([a-zA-Z ñ Ñ á Á éÉ íÍ óÓ úÚ 0-9]+)(:)(\d+)$/;
-        var patron = /^([a-zA-Z ñ Ñ á Á éÉ íÍ óÓ úÚ 0-9 -_\s]+)(\|)([A-Z]+)(:)(\d+)$/;
+        //var patron = /^([a-zA-Z ñ Ñ á Á éÉ íÍ óÓ úÚ 0-9]+)(:)(\d+)$/;stión
+        var patron = /^([a-zA-Z ñ Ñ á Á éÉ íÍ óÓ úÚ 0-9 \/ \( \) -_,\s]+)(\|)([A-Z]+)(:)(\d+)$/;
         if (patron.test($variable.val())) {            
             var $input = '<input type="text" name="variableData[]" value="'+$variable.val()+'" readonly class="form-control input-sm"/>';
             var s = getTipodeVariable($variable.val());            
