@@ -130,7 +130,7 @@ class Cuadro_model  extends CI_Model {
         
         $this->db->select('id_cuadro, id_objetivo, creado_por, titulo, fecha_registro');        
         $query = $this->db->get($this->_name); 
-        //log_message('error', print_r($this->db->last_query(),true));        
+        log_message('error', print_r($this->db->last_query(),true));        
         if ($num_rows === true) {            
             $rs = $query->num_rows();
         } else {

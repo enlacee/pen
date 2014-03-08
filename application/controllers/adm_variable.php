@@ -59,7 +59,16 @@ class Adm_variable extends MY_Controller {
         $this->form_validation->set_rules('tipo_variable','Tipo Variable','required');
         if (App_variable::TIPO_LISTA == $tipo_variable) {
             $this->form_validation->set_rules('value', 'Valor','trim|required|callback_value_check');
+        } else if(App_variable::TIPO_ENTERO == $tipo_variable) { 
+            if (!empty($this->input->post('patron'))) {
+                $this->form_validation->set_rules('patron', 'Patron','trim|callback_validar_numero');
+            }
+        } else if (App_variable::TIPO_REAL == $tipo_variable) {
+            if (!empty($this->input->post('patron'))) {
+                $this->form_validation->set_rules('patron', 'Patron','trim|callback_validar_numero_real');
+            }
         }
+        
         $this->form_validation->set_rules('patron_a_validar');        
     }
     
@@ -72,7 +81,7 @@ class Adm_variable extends MY_Controller {
         $variable['nombre'] = $this->input->post('nombre', true);
         $variable['tipo_variable'] = $this->input->post('tipo_variable');
         $variable['value_data'] = $this->input->post('value');
-        $variable['patron_a_validar'] = $this->input->post('patron_a_validar');
+        $variable['patron_a_validar'] = $this->input->post('patron');
         $variable['nombre_key'] = '';
         $variable['fecha_registro'] = date('Y-m-d h:i:s');
       
@@ -115,6 +124,30 @@ class Adm_variable extends MY_Controller {
             return TRUE;
         }        
     }
+
+    public function validar_numero($str)
+    {
+        if (preg_match("#^(([0-9])+(,?))+$#", $str)) {  // 1,2,3 
+            return true;
+        } else if(preg_match("#^[0-9]+-[0-9]+$#", $str)) { // 1-3
+            return true;
+        } else {
+            $this->form_validation->set_message('validar_numero', 'El campo %s no es valido. 1,2,3 ó 1-3');
+            return false;
+        }
+    }
+    public function validar_numero_real($str)
+    {
+        if (preg_match("#^([0-9]+(.[0-9]+)?,?)+$#", $str)) {  // 1.5,1.6,1.7 
+            return true;
+        } else if(preg_match("#^[0-9]+(.[0-9]+)?-[0-9]+(.[0-9]+)?$#", $str)) { // 1.5-1.7
+            return true;
+        } else {
+            $this->form_validation->set_message('validar_numero_real', 'El campo %s no es valido. 1.5,1.6,1.7 ó 1.5-1.7');
+            return false;
+        }
+    }    
+    
     
     /**
      * Listar variables

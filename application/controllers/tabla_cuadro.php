@@ -43,7 +43,7 @@ class Tabla_cuadro  extends MY_Controller {
     }
     
     public function nuevo($idCuadro)
-    {
+    {   $this->_validarNumero("xxx", "1,2,3");
         $this->load->model('Variable_model');
         $this->load->model('Cuadro_data_model');
         $this->load->driver('cache');
@@ -90,13 +90,15 @@ class Tabla_cuadro  extends MY_Controller {
             foreach ($arreglo as $key => $obj){
                 if ($obj->tipo_variable == Variable_model::TIPO_LISTA_STRING) {
                     $this->form_validation->set_rules($obj->nombre_key,$obj->nombre,'required|callback_value_check');
+                } else if ($obj->tipo_variable == Variable_model::TIPO_ENTERO_STRING) {
+                    
                 } else {
                    $this->form_validation->set_rules($obj->nombre_key,$obj->nombre,'trim|required'); 
                 }       
             }       
         }        
     }
-
+    
     /**
      * Validacion de datos segun codeigniter
      * Solo admite numeros de con digitos del [1-9]

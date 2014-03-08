@@ -23,7 +23,7 @@ echo form_open("", $atributes); ?>
             <option value = "" <?php echo set_select('tipo_variable', '', TRUE); ?>>-- select --</option>
             <option value = "1" <?php echo set_select('tipo_variable', '1'); ?>>entero</option>
             <option value = "2" <?php echo set_select('tipo_variable', '2'); ?>>real</option>
-            <option value = "3" <?php echo set_select('tipo_variable', '3'); ?>>binario</option>
+            <!--<option value = "3" <?php echo set_select('tipo_variable', '3'); ?>>binario</option>-->
             <option value = "4" <?php echo set_select('tipo_variable', '4'); ?>>cadena</option>
             <option value = "5" <?php echo set_select('tipo_variable', '5'); ?>>lista</option>
         </select>      
@@ -49,8 +49,8 @@ echo form_open("", $atributes); ?>
     <div class="form-group" id="patron">
         <label class="col-sm-2 control-label">Patron a validar</label>
         <div class="col-sm-3">
-            <input type="text" name="patron_a_validar" id="patron_a_validar" class="form-control input-sm"
-                   value="<?php echo set_value('patron_a_validar'); ?>" placeholder="">
+            <input type="text" name="patron" id="patron" class="form-control input-sm"
+                   value="<?php echo set_value('patron'); ?>" placeholder="">
         </div>
     </div>
     

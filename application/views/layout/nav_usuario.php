@@ -13,7 +13,7 @@
 
             <div class="navbar-collapse collapse"><?php //var_dump($user_objetivo);?>              
               <ul class="nav navbar-nav">
-                <li class="dropdown">
+                <li class="active dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Objetivos <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li class="dropdown-header">Lista de Objetivos</li>

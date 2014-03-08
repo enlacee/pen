@@ -24,7 +24,7 @@ jQuery("#list").jqGrid({
 //jQuery("#list").jqGrid('navGrid','#pager',{edit:true,add:false,del:false});
 //add delete
 $("#list").navGrid('#pager',
-        {edit:true,add:false,del:true,search:false},{}, {},
+        {edit:true,add:false,del:true,search:true},{}, {},
         {width:500, url:'/adm_variable/jqeditar',
             reloadAfterSubmit:true,
              onclickSubmit: function(param) {
