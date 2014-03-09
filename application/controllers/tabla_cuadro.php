@@ -93,6 +93,7 @@ class Tabla_cuadro  extends MY_Controller {
                     
                 } else if ($obj->tipo_variable == Variable_model::TIPO_ENTERO_STRING) {                    
                     if(!empty($obj->patron_a_validar)) { // 0,1,2,3 O 0-3
+                        //ECHO $obj->patron_a_validar; EXIT;
                         $this->form_validation->set_rules(
                                 $obj->nombre_key,
                                 $obj->nombre,
@@ -119,8 +120,7 @@ class Tabla_cuadro  extends MY_Controller {
     }
     
     public function validar_numero_entero_match($str, $param)
-    {        
-        $param = clear_string_final($param, ',');
+    {   
         if (!preg_match("#^[$param]$#", $str)) {
             $this->form_validation->set_message('validar_numero_entero_match', "El campo %s no es valido solo $param.");
             return FALSE;
@@ -157,7 +157,7 @@ class Tabla_cuadro  extends MY_Controller {
      */
     public function validar_numero_real_match($str, $param)
     {
-        $param = clear_string_final($param, ',');
+        //$param = clear_string_final($param, ',');
         $patron = $param;
         if (strpos($patron,',')) { // 1.01,1.02,1.03
 
