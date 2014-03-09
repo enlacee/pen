@@ -5,11 +5,12 @@
 jQuery("#list").jqGrid({
    	url:'/adm_variable/jqlistar?q=2',
 	datatype: "json",
-   	colNames:['id','Nombre', 'Tipo variable', 'Fecha registro'],
+   	colNames:['id','Nombre', 'Tipo variable', 'Patro a validar','Fecha registro'],
    	colModel:[
    		{name:'id_variable',index:'id_variable', width:55},
    		{name:'nombre',index:'nombre', width:150, editable:true},
    		{name:'tipo_variable',index:'tipo_variable', width:100},
+                {name:'patron_a_validar',index:'patron_a_validar', width:100},                
    		{name:'fecha_registro',index:'fecha_registro', width:130, align:"right"}
    	],
    	rowNum:10,

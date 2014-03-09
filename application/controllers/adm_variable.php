@@ -140,10 +140,10 @@ class Adm_variable extends MY_Controller {
     {
         if (preg_match("#^([0-9]+(.[0-9]+)?,?)+$#", $str)) {  // 1.5,1.6,1.7 
             return true; 
-        } else if(preg_match("#^[0-9]+(.[0-9]{1,2}+)?-[0-9]+(.[0-9]{1,2}+)?$#", $str)) { // 1.5-1.7
-            return true;
+        /*} else if(preg_match("#^[0-9]+(.[0-9]{1,2}+)?-[0-9]+(.[0-9]{1,2}+)?$#", $str)) { // 1.5-1.7
+            return true;*/
         } else {
-            $this->form_validation->set_message('validar_numero_real', 'El campo %s no es valido solo 1.5,1.6,1.7 ó 1.5-1.7 maximo 2 decimales 1.00');
+            $this->form_validation->set_message('validar_numero_real', 'El campo %s no es valido solo ejem: (1.5,1.6,1.7)');
             return false;
         }
     }    
@@ -205,6 +205,7 @@ class Adm_variable extends MY_Controller {
                 $row['id_variable'],
                 $row['nombre'],
                 $row['tipo_variable'],
+                $row['patron_a_validar'],
                 $row['fecha_registro']);
             $i++;        
         }

@@ -96,9 +96,9 @@ class Tabla_cuadro  extends MY_Controller {
                         $this->form_validation->set_rules(
                                 $obj->nombre_key,
                                 $obj->nombre,
-                                "required|callback_validar_numero_entero[$obj->patron_a_validar]");
-                    } else {
-                        $this->form_validation->set_rules($obj->nombre_key, $obj->nombre, 'trim|required');
+                                "required|callback_validar_numero_entero_match[$obj->patron_a_validar]");
+                    } else {                        
+                        $this->form_validation->set_rules($obj->nombre_key, $obj->nombre, 'trim|required|callback_validar_numero_entero');
                     }
                     
                 } else if ($obj->tipo_variable == Variable_model::TIPO_REAL_STRING) {
@@ -118,11 +118,21 @@ class Tabla_cuadro  extends MY_Controller {
         }        
     }
     
-    public function validar_numero_entero($str, $param)
+    public function validar_numero_entero_match($str, $param)
     {        
         $param = clear_string_final($param, ',');
         if (!preg_match("#^[$param]$#", $str)) {
-            $this->form_validation->set_message('validar_numero_entero', "El campo %s no es valido solo $param.");
+            $this->form_validation->set_message('validar_numero_entero_match', "El campo %s no es valido solo $param.");
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+    
+    public function validar_numero_entero($str)
+    {  
+        if (!preg_match("#^[0-9]+$#", $str)) {
+            $this->form_validation->set_message('validar_numero_entero', "El campo %s no es valido solo Numeros Enteros.");
             return FALSE;
         } else {
             return TRUE;
@@ -154,9 +164,9 @@ class Tabla_cuadro  extends MY_Controller {
             $dataNumero = preg_split("/,/", $patron);
             $new = array();
             foreach ($dataNumero as $key => $value) {
-                    $part = preg_split('/\./', $dataNumero[$key]);
-                    $new[$key]['entero'] = $part[0];
-                    $new[$key]['decimal'] = $part[1];
+                $part = preg_split('/\./', $dataNumero[$key]);
+                $new[$key]['entero'] = $part[0];
+                $new[$key]['decimal'] = $part[1];
             }
 
             //--- for mach
@@ -177,6 +187,20 @@ class Tabla_cuadro  extends MY_Controller {
                 $this->form_validation->set_message('validar_numero_real_match', "El campo %s no es valido solo $param");
                 return FALSE;                     
             }
+            
+        } else { //$patron = 1.55
+            
+            $part = preg_split('/\./', $patron);
+            $_numero = $part[0];
+            $_decimal = $part[1];
+            
+            if (!preg_match("#^".$_numero.".".$_decimal."$#", $str)) {
+                $this->form_validation->set_message('validar_numero_real_match', "El campo %s no es valido solo $param");
+                return FALSE;
+            } else {
+                return TRUE;
+            }            
+            
         }
     }    
     

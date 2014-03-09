@@ -118,7 +118,7 @@ class Variable_model  extends CI_Model {
             }
         }
         
-        $this->db->select('id_variable, nombre, tipo_variable, fecha_registro');        
+        $this->db->select('id_variable, nombre, tipo_variable, patron_a_validar,fecha_registro');        
         $query = $this->db->get($this->_name); 
         //log_message('error', print_r($this->db->last_query(),true));        
         if ($num_rows === true) {
