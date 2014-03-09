@@ -43,7 +43,7 @@ class Tabla_cuadro  extends MY_Controller {
     }
     
     public function nuevo($idCuadro)
-    {   $this->_validarNumero("xxx", "1,2,3");
+    {
         $this->load->model('Variable_model');
         $this->load->model('Cuadro_data_model');
         $this->load->driver('cache');
@@ -85,12 +85,31 @@ class Tabla_cuadro  extends MY_Controller {
      * falta implementar otras validaciones en BACK.
      */    
     private function _validarForm($objCuadro)
-    {   
+    {
         foreach ($objCuadro as $indice => $arreglo) {
             foreach ($arreglo as $key => $obj){
                 if ($obj->tipo_variable == Variable_model::TIPO_LISTA_STRING) {
                     $this->form_validation->set_rules($obj->nombre_key,$obj->nombre,'required|callback_value_check');
-                } else if ($obj->tipo_variable == Variable_model::TIPO_ENTERO_STRING) {
+                    
+                } else if ($obj->tipo_variable == Variable_model::TIPO_ENTERO_STRING) {                    
+                    if(!empty($obj->patron_a_validar)) { // 0,1,2,3 O 0-3
+                        $this->form_validation->set_rules(
+                                $obj->nombre_key,
+                                $obj->nombre,
+                                "required|callback_validar_numero_entero[$obj->patron_a_validar]");
+                    } else {
+                        $this->form_validation->set_rules($obj->nombre_key, $obj->nombre, 'trim|required');
+                    }
+                    
+                } else if ($obj->tipo_variable == Variable_model::TIPO_REAL_STRING) {
+                    if(!empty($obj->patron_a_validar)) { // (1.1,1.2,1.3.1.4) ó (1.1-1.4)
+                        $this->form_validation->set_rules(
+                                $obj->nombre_key,
+                                $obj->nombre,
+                                "required|callback_validar_numero_real_match[$obj->patron_a_validar]");
+                    } else { //normal
+                        $this->form_validation->set_rules($obj->nombre_key, $obj->nombre, 'trim|required|callback_validar_numero_real');
+                    }
                     
                 } else {
                    $this->form_validation->set_rules($obj->nombre_key,$obj->nombre,'trim|required'); 
@@ -98,6 +117,69 @@ class Tabla_cuadro  extends MY_Controller {
             }       
         }        
     }
+    
+    public function validar_numero_entero($str, $param)
+    {        
+        $param = clear_string_final($param, ',');
+        if (!preg_match("#^[$param]$#", $str)) {
+            $this->form_validation->set_message('validar_numero_entero', "El campo %s no es valido solo $param.");
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    public function validar_numero_real($str)
+    {   
+        if (!preg_match("#^[0-9]+(.[0-9]+)?$#", $str)) {
+            $this->form_validation->set_message('validar_numero_real', "El campo %s no es valido solo numero entero o decimal.");
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    /**
+     * Validacion para decimales que son exactamente = al parametro pasado separado x comas.
+     * @param type $str cadena a validar
+     * @param type $param
+     * @return boolean
+     */
+    public function validar_numero_real_match($str, $param)
+    {
+        $param = clear_string_final($param, ',');
+        $patron = $param;
+        if (strpos($patron,',')) { // 1.01,1.02,1.03
+
+            $dataNumero = preg_split("/,/", $patron);
+            $new = array();
+            foreach ($dataNumero as $key => $value) {
+                    $part = preg_split('/\./', $dataNumero[$key]);
+                    $new[$key]['entero'] = $part[0];
+                    $new[$key]['decimal'] = $part[1];
+            }
+
+            //--- for mach
+            $flag = false;
+            foreach ($new as $key => $value) {
+                $_numero = $value['entero'];
+                $_decimal = $value['decimal'];
+                if (preg_match("#^[".$_numero."](.[".$_decimal."])$#", $str)) {  // 1.5,1.6,1.7
+                    $flag = true;
+                    break;
+                }
+            }
+
+            if($flag == true) {
+                //echo "<BR>APROVADO";
+                return TRUE; 
+            } else {                
+                $this->form_validation->set_message('validar_numero_real_match', "El campo %s no es valido solo $param");
+                return FALSE;                     
+            }
+        }
+    }    
+    
     
     /**
      * Validacion de datos segun codeigniter
