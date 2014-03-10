@@ -42,6 +42,50 @@ class Tabla_cuadro  extends MY_Controller {
         $this->layout->view('tabla-cuadro/index', $data);        
     }
     
+    public function editar($idCuadro, $id)
+    {
+        $this->load->model('Variable_model');
+        $this->load->model('Cuadro_data_model');
+        $this->load->driver('cache');
+        $this->load->helper('form');        
+        $this->load->library('form_validation');        
+        
+        $objCuadro = new Cuadro_data_model($idCuadro);
+        $objCuadro->getRegistro($id, true);
+      
+        $data = array(
+            'titulo' => 'Editar Registro',
+            'mensajeBox' => $this->session->flashdata('mensajeBox'),
+            'idCuadro' => $idCuadro,
+            'id' => $id,
+            'objCuadro' => $objCuadro
+        );
+        
+        // datos solo post
+        $dataPost = $this->input->post();
+        if ($dataPost) {                
+            $idCuadro = $this->input->post('id_cuadro'); 
+            $id = $this->input->post('id_registro');
+            
+            if (preg_match('#^[0-9]+$#', $idCuadro) && preg_match('#^[0-9]+$#', $id)) {                
+                $this->_validarForm($objCuadro);
+                if ($this->form_validation->run() == false) {
+                    // error en alguna validacion       
+                } else {
+                    $where = "id = " . $dataPost['id_registro'];
+                    unset($dataPost['id_cuadro']);
+                    unset($dataPost['id_registro']);                              
+                    $this->db->update( $objCuadro->getNombreTabla(), $dataPost, $where);
+                    $this->session->set_flashdata('mensajeBox', 'Se guardo corectamente  el Registro: <strong>' . $id . '</strong>');
+                    redirect("/tabla_cuadro/index/$idCuadro");                     
+                    exit;                    
+                }
+            }
+        }        
+        
+        $this->layout->view('tabla-cuadro/editar', $data);        
+    }
+    
     public function nuevo($idCuadro)
     {
         $this->load->model('Variable_model');

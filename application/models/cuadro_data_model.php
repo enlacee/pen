@@ -28,6 +28,28 @@ class Cuadro_data_model extends CI_Model {
     }
     
     /**
+     * Objener 1 registro de la tabla Cuadro dinamico
+     * y agregar dichos valores al objeto.
+     * @param Integer $idRegistro id de la tabla dinamica
+     * @param Boolean $addObj
+     * @return Array data
+     */
+    public function getRegistro($idRegistro, $addObj = false)
+    {
+        $this->db->select()->from($this->getNombreTabla());
+        $query = $this->db->where('id', $idRegistro)->limit(1)->get();
+        $dataRegistro = $query->row_array();
+        
+        // asociacion directa.
+        if ($addObj == true) {            
+            foreach ($this->cuadro as $indice => $obj) {                
+                $obj->data_por_registro = $dataRegistro[$obj->nombre_key];           
+            }        
+        }        
+        return $dataRegistro;
+    }
+    
+    /**
      * Agrega datos si es una variable TIPO LISTA
      */
     private function _vincularDatos()

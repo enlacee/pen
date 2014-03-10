@@ -79,7 +79,17 @@ jQuery("#list").jqGrid({
 });
 jQuery("#list").jqGrid('navGrid','#pager',{search:false, edit:false,add:false,del:true});
 
-//$("#list47").jqGrid('setGridWidth', 250);
+jQuery("#list").jqGrid('navButtonAdd','#pager',{caption:"Edit",
+    onClickButton:function(){
+        var gsr = jQuery("#list").jqGrid('getGridParam','selrow');
+        if(gsr){
+            window.location.href = '/tabla_cuadro/editar/'+id+'/'+gsr;
+        } else {
+            alert("Seleccione una fila.")
+        }							
+    } 
+});     
+        
 fixGridSize($("#list"));
 EOT;
         
