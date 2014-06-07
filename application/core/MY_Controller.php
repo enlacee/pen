@@ -10,29 +10,23 @@
 class MY_Controller extends CI_Controller {
     
     public $auth;
-    public $dataView = array();    
+    public $dataView = array();
+    public $idUsuario = null;
+    public $esSuper = null;
     private $flagGrid = false;
 
     public function __construct()
     {
         parent::__construct();
-        $this->dependenciasBasicas();
-        $this->iniciarLayout();        
-        //login
+        $this->dependencias();
         $this->validarUsuario();
     }
 
-    private function dependenciasBasicas()
+    private function dependencias()
     {
+        $this->load->library('layout');        
         $this->load->helper('url');
-    }
-    /**
-     * Carga una vista por defecto segun.
-     *  - falta implementar interaccion con login
-     */    
-    public function iniciarLayout()
-    {
-        $this->load->library('layout');
+        //$this->output->enable_profiler(TRUE);
     }
     
     /**
@@ -44,7 +38,9 @@ class MY_Controller extends CI_Controller {
     {   
         //$this->session->userdata('user','');
         $userSession = $this->session->userdata('user');        
-        if (is_array($userSession) && count($userSession) > 0) {            
+        if (is_array($userSession) && count($userSession) > 0) {
+            $this->idUsuario = $userSession['id_usuario'];
+            $this->esSuper = $userSession['es_super_usuario'];
             $this->auth = true;
         } else {
             $this->auth = false;
@@ -61,16 +57,17 @@ class MY_Controller extends CI_Controller {
         if ($this->flagGrid == false) {           
             $this->dataView['css'][] = "jqgrid/css/cupertino/jquery-ui-1.10.4.custom.min.css";
             $this->dataView['css'][] = "jqgrid/css/ui.jqgrid.css";                  
-            $this->dataView['js'][] = "jqgrid/i18n/grid.locale-en.js";
+            $this->dataView['js'][] = "jqgrid/i18n/grid.locale-es.js";
             $this->dataView['js'][] = "jqgrid/jquery.jqGrid.min.js";
             $this->dataView['js'][] = "jqgrid/fixGridSize.js";
             $this->flagGrid = true;
         }        
+        $this->load->vars($this->dataView);
         return $this->dataView;       
     }
     
     protected function loadStatic(array $data = array()) {
-        
+      
         foreach ($data as $key => $value) {
             if ($key === 'css') {
                 if (is_string($data[$key])) {
@@ -88,9 +85,14 @@ class MY_Controller extends CI_Controller {
                         $this->dataView['js'][] = $valor;
                     }                        
                 }                
+            } elseif ($key === 'jstring') {
+                if (is_string($data[$key])) {
+                    $this->dataView['jstring'][] = $value;
+                }
             }   
-        }
-
+        }          
+        //$this->load->get_var($key)
+        $this->load->vars($this->dataView);
         return $this->dataView;
     }    
 }

@@ -36,8 +36,8 @@
 
         <form class="form-signin" role="form" action="/auth/login" method="POST">
         <h2 class="form-signin-heading">Login</h2>
-            <input type="email" name="email" class="form-control" placeholder="Email" required autofocus>
-            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <input type="email" name="email" class="form-control" placeholder="Email" required autofocus value="root@gmail.com">
+            <input type="password" name="password" class="form-control" placeholder="Password" required value="123456">
         <label class="checkbox">
             <input type="checkbox" checked="" value="remember-me"> Recordar
         </label>

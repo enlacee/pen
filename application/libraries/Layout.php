@@ -20,7 +20,7 @@ class Layout
     {   
         $loadedData = array();
         $loadedData = array_merge($loadedData, (array) $this->CI->session->all_userdata());
-        
+        $data = $this->_formatTitle($data);
         $loadedData['content_for_layout'] = $this->CI->load->view($view, $data, true);   
         if ($return) {
             $output = $this->CI->load->view($this->layout, $loadedData, true);
@@ -28,6 +28,21 @@ class Layout
         } else {
             $this->CI->load->view($this->layout, $loadedData, false);
         }
+    }
+    
+    /**
+     * Titulo de la pagina para las vistas configuradas
+     * @param Array $data
+     * @return Array
+     */
+    private function _formatTitle($data)
+    {
+        if (isset($data['titulo'])) {
+            $data['titulo'] = $data['titulo'] . ' | '. TITULO;
+        } else {
+            $data['titulo'] = 'default' . ' | '. TITULO; 
+        }
+        return $data;
     }
 }
  
