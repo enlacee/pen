@@ -18,24 +18,15 @@ class MY_Controller extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->dependenciasBasicas();
-        $this->iniciarLayout();        
-        //login
+        $this->dependencias();
         $this->validarUsuario();
     }
 
-    private function dependenciasBasicas()
+    private function dependencias()
     {
+        $this->load->library('layout');        
         $this->load->helper('url');
         //$this->output->enable_profiler(TRUE);
-    }
-    /**
-     * Carga una vista por defecto segun.
-     *  - falta implementar interaccion con login
-     */    
-    private function iniciarLayout()
-    {
-        $this->load->library('layout');
     }
     
     /**
